@@ -5323,7 +5323,6 @@ end)
 local crasherKey = 0
 local menuKey = 0x14 -- الزر الافتراضي للمنيو (Caps Lock)
 
--- 2. إعداد زر اختيار "كراشر" (Crasher Key)
 MachoMenuKeybind(VIPTabSections[3], "TP", 0, function(key)
     crasherKey = key
     MachoMenuNotification("Keybind Updated", "tp key bound to: " .. tostring(key))
@@ -5382,8 +5381,6 @@ MachoMenuButton(VIPTabSections[2], "Unjail Me", function()
 end)
 
 MachoMenuButton(VIPTabSections[2], "Self Revive", function()
-    -- التحقق من المفتاح (اختياري، يمكنك حذفه إذا أردت أن يعمل الزر للجميع)
-    if not HasValidStaffKey() then return end
 
     -- تنفيذ حدث الإنعاش
     TriggerEvent('esx_ambulancejob:revive')
