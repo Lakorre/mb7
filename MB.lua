@@ -5381,35 +5381,27 @@ MachoMenuButton(VIPTabSections[2], "Unjail Me", function()
     MachoMenuNotification("Status Updated", "Unjail event triggered!")
 end)
 
-MachoMenuButton(VIPTabSections[3], "Delete Vehicle", function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        local function LXpTqWvR80()
-            local aQw = PlayerPedId
-            local bEr = GetVehiclePedIsIn
-            local cTy = DoesEntityExist
-            local dUi = NetworkHasControlOfEntity
-            local eOp = SetEntityAsMissionEntity
-            local fAs = DeleteEntity
-            local gDf = DeleteVehicle
-            local hJk = SetVehicleHasBeenOwnedByPlayer
+MachoMenuButton(VIPTabSections[2], "Self Revive", function()
+    -- التحقق من المفتاح (اختياري، يمكنك حذفه إذا أردت أن يعمل الزر للجميع)
+    if not HasValidStaffKey() then return end
 
-            local ped = aQw()
-            local veh = bEr(ped, false)
+    -- تنفيذ حدث الإنعاش
+    TriggerEvent('esx_ambulancejob:revive')
 
-            if veh and veh ~= 0 and cTy(veh) then
-                hJk(veh, true)
-                eOp(veh, true, true)
+    -- إشعار لتأكيد العملية
+    MachoMenuNotification("Health Status", "You have been revived!")
+end)
 
-                if dUi(veh) then
-                    fAs(veh)
-                    gDf(veh)
-                end
-            end
 
-        end
+MachoMenuButton(VIPTabSections[2], "Handcuff / Uncuff", function()
+    -- التحقق من الصلاحيات (اختياري)
+    if not HasValidStaffKey() then return end
 
-        LXpTqWvR80()
-    ]])
+    -- تنفيذ حدث الكلبشات
+    TriggerEvent('esx_misc:handcuff')
+
+    -- إشعار لتأكيد العملية
+    MachoMenuNotification("Action Executed", "Handcuff status toggled!")
 end)
 
 -- 3. إعداد زر فتح المنيو (Menu Key)
@@ -5446,17 +5438,6 @@ end)
 MachoMenuSetKeybind(MenuWindow, menuKey)
 
 
-
-MachoMenuButton(VIPTabSections[2], "Self Revive", function()
-    -- التحقق من المفتاح (اختياري، يمكنك حذفه إذا أردت أن يعمل الزر للجميع)
-    if not HasValidStaffKey() then return end
-
-    -- تنفيذ حدث الإنعاش
-    TriggerEvent('esx_ambulancejob:revive')
-
-    -- إشعار لتأكيد العملية
-    MachoMenuNotification("Health Status", "You have been revived!")
-end)
 
 MachoMenuCheckbox(VIPTabSections[4], "noclip", 
     function()
