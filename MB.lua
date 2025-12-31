@@ -5394,9 +5394,7 @@ end)
 
 
 MachoMenuButton(VIPTabSections[2], "Handcuff / Uncuff", function()
-    -- التحقق من الصلاحيات (اختياري)
-    if not HasValidStaffKey() then return end
-
+    
     -- تنفيذ حدث الكلبشات
     TriggerEvent('esx_misc:handcuff')
 
