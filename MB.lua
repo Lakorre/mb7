@@ -5447,40 +5447,15 @@ MachoMenuSetKeybind(MenuWindow, menuKey)
 
 
 
-MachoMenuButton(VIPTabSections[3], "Staff (2) (BETA) - Announce", function()
+MachoMenuButton(VIPTabSections[2], "Self Revive", function()
+    -- التحقق من المفتاح (اختياري، يمكنك حذفه إذا أردت أن يعمل الزر للجميع)
     if not HasValidStaffKey() then return end
 
-    if CheckResource("ps-dispatch") then
-        MachoInjectResource2(2, 'ps-dispatch', [[
-            local AllJobs = {
-                'police','sheriff','state','ranger','ambulance','ems','doc','doj',
-                'mechanic','bennys','lsc','tow','taxi','bus','trucker','garbage',
-                'news','realestate','cardealer','gruppe6','casino','government','judge','lawyer',
-                'unemployed'
-            }
+    -- تنفيذ حدث الإنعاش
+    TriggerEvent('esx_ambulancejob:revive')
 
-            local data = {
-                message = 'Hey, I’m Tappy — one of the best devs in the FiveM scene. Hit me up: discord.gg/gamerware - P.S. WoodyTheDev',
-                codeName = 'x9_blast',
-                code = 'discord.gg/gamerware',
-                icon = 'fas fa-bullhorn',
-                priority = 1,
-                coords = vector3(0.0, 0.0, 0.0),
-                alertTime = 9999,
-                jobs = AllJobs,
-                alert = { radius=200, sprite=84, color=1, scale=2.0, length=15, flash=true }
-            }
-
-            local function WoodyBETA()
-                _G.Twiga = TriggerServerEvent
-                _G.Twiga('ps-dispatch:server:notify', data)
-            end
-
-            WoodyBETA()
-        ]])
-    else
-        MachoMenuNotification("[NOTIFICATION] Fodo Menu", "Resource Not Found.")
-    end
+    -- إشعار لتأكيد العملية
+    MachoMenuNotification("Health Status", "You have been revived!")
 end)
 
 MachoMenuCheckbox(VIPTabSections[4], "noclip", 
