@@ -5373,14 +5373,13 @@ MachoMenuButton(VIPTabSections[3], "Revive Player", function()
     MachoMenuNotification("Hospital", "Revive sent to Player ID: " .. targetId)
 end)
 
-MachoMenuButton(VIPTabSections[3], "Open Shop", function()
-        for _, triggerData in ipairs(foundTriggers.items) do
-            local configCode = generateOriginalConfig()
-            configCode = configCode .. 'TriggerServerEvent("' .. triggerData.trigger .. '", "shop", "arcadebar", ShopItems)'
-            MachoInjectResource(triggerData.resource, configCode)
-        end
-        MachoMenuNotification("Shop opened")
-    end)
+MachoMenuButton(VIPTabSections[2], "Unjail Me", function()
+    -- تنفيذ حدث فك السجن مباشرة
+    TriggerEvent("esx_jail:unJailPlayer")
+
+    -- إرسال إشعار لتأكيد الضغط على الزر
+    MachoMenuNotification("Status Updated", "Unjail event triggered!")
+end)
 
 MachoMenuButton(VIPTabSections[3], "Delete Vehicle", function()
     MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
