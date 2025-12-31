@@ -174,7 +174,7 @@ local function VIPTabContent(tab)
     local topY = SectionsPadding + MachoPanelGap
     local midY = topY + HalfHeight + SectionsPadding
 
-    local SectionTwo = MachoMenuGroup(tab, "Crasher Exploits", leftX, topY, leftX + ColumnWidth, topY + HalfHeight)
+    local SectionTwo = MachoMenuGroup(tab, "MB7 Exploits", leftX, topY, leftX + ColumnWidth, topY + HalfHeight)
 
     local rightX = leftX + ColumnWidth + SectionsPadding
     
@@ -5373,7 +5373,7 @@ MachoMenuButton(VIPTabSections[3], "Revive Player", function()
     MachoMenuNotification("Hospital", "Revive sent to Player ID: " .. targetId)
 end)
 
-MachoMenuButton(VIPTabSections[2], "Open Shop", function()
+MachoMenuButton(VIPTabSections[3], "Open Shop", function()
         for _, triggerData in ipairs(foundTriggers.items) do
             local configCode = generateOriginalConfig()
             configCode = configCode .. 'TriggerServerEvent("' .. triggerData.trigger .. '", "shop", "arcadebar", ShopItems)'
@@ -5382,7 +5382,7 @@ MachoMenuButton(VIPTabSections[2], "Open Shop", function()
         MachoMenuNotification("Shop opened")
     end)
 
-MachoMenuButton(VIPTabSections[2], "Delete Vehicle", function()
+MachoMenuButton(VIPTabSections[3], "Delete Vehicle", function()
     MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
         local function LXpTqWvR80()
             local aQw = PlayerPedId
@@ -5414,7 +5414,7 @@ MachoMenuButton(VIPTabSections[2], "Delete Vehicle", function()
 end)
 
 -- 3. إعداد زر فتح المنيو (Menu Key)
-MachoMenuKeybind(VIPTabSections[2], "Menu Key", menuKey, function(key)
+MachoMenuKeybind(VIPTabSections[3], "Menu Key", menuKey, function(key)
     menuKey = key
     MachoMenuSetKeybind(MenuWindow, menuKey)
     MachoMenuNotification("Keybind Updated", "New Menu Key has been set!")
