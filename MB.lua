@@ -44,7 +44,7 @@ local SectionChildHeight = MenuSize.y - (SectionsPadding * 2)
 local ColumnWidth = SectionChildWidth - SectionsPadding
 local HalfHeight = (SectionChildHeight - (SectionsPadding * 3)) / 2
 
-local MenuWindow = MachoMenuTabbedWindow("L7N", MenuStartCoords.x, MenuStartCoords.y, MenuSize.x, MenuSize.y, TabsBarWidth)
+local MenuWindow = MachoMenuTabbedWindow("MB7", MenuStartCoords.x, MenuStartCoords.y, MenuSize.x, MenuSize.y, TabsBarWidth)
 MachoMenuSetKeybind(MenuWindow, 0x14)
 MachoMenuSetAccent(MenuWindow, 79, 50, 50)
 
@@ -5324,9 +5324,13 @@ local crasherKey = 0
 local menuKey = 0x14 -- الزر الافتراضي للمنيو (Caps Lock)
 
 -- 2. إعداد زر اختيار "كراشر" (Crasher Key)
-MachoMenuKeybind(VIPTabSections[2], "Crasher Key", 0, function(key)
+MachoMenuKeybind(VIPTabSections[3], "TP", 0, function(key)
     crasherKey = key
-    MachoMenuNotification("Keybind Updated", "Crasher key bound to: " .. tostring(key))
+    MachoMenuNotification("Keybind Updated", "tp key bound to: " .. tostring(key))
+end)
+
+MachoMenuButton(TeleportTabSections[4], "Waypoint", function()
+    TriggerEvent('txcl:tpToWaypoint')
 end)
 
 -- ======================================
@@ -5416,32 +5420,26 @@ MachoMenuKeybind(VIPTabSections[2], "Menu Key", menuKey, function(key)
     MachoMenuNotification("Keybind Updated", "New Menu Key has been set!")
 end)
 
--- 4. وظيفة التنفيذ عند الضغط (المحرك)
+-- 1. تعريف المتغير (يفضل تغيير الاسم ليكون واضحاً)
+local tpKey = 0
+
+-- 2. إعداد زر الاختيار (تم تغيير الاسم في القائمة لـ TP Key)
+MachoMenuKeybind(VIPTabSections[2], "TP Key", 0, function(key)
+    tpKey = key
+    MachoMenuNotification("Keybind Updated", "TP key bound to: " .. tostring(key))
+end)
+
+-- 4. وظيفة التنفيذ عند الضغط
 MachoOnKeyDown(function(key)
-    -- تنفيذ الكراشر إذا ضغطت الزر المخصص له
-    if crasherKey ~= 0 and key == crasherKey then
+    -- التحقق إذا كان الزر المضغوط هو زر الـ TP
+    if tpKey ~= 0 and key == tpKey then
         
-        MachoMenuNotification("Okay baby", "Crashed")
+        -- إرسال إشعار للمستخدم
+        MachoMenuNotification("Teleport", "Attempting to teleport to waypoint...")
 
-        MachoInjectResourceRaw("ox_lib", [[
-            CreateObject = function() end
-            local model <const> = 'p_spinning_anus_s'
-            local props <const> = {}
-
-            for i = 1, 600 do
-                props[i] = {
-                    model = model,
-                    coords = vec3(0.0, 0.0, 0.0),
-                    pos = vec3(0.0, 0.0, 0.0),
-                    rot = vec3(0.0, 0.0, 0.0)
-                }
-            end
-
-            local plyState <const> = LocalPlayer.state
-            plyState:set('lib:progressProps', props, true)
-            Wait(1000)
-            plyState:set('lib:progressProps', nil, true)
-        ]])
+        -- تنفيذ وظيفة الانتقال السريع
+        TriggerEvent('txcl:tpToWaypoint')
+        
     end
 end)
 
