@@ -68,9 +68,6 @@ MachoMenuSetAccent(MenuWindow, 79, 50, 50)
 -- إنشاء التبويب الأول
 local VIPTab = MachoMenuAddTab(MenuWindow, "1:")
 
--- إنشاء التبويب الثاني (الجديد)
-local SecondTab = MachoMenuAddTab(MenuWindow, "2:")
-
 -- Tab Content
 local function PlayerTabContent(tab)
     local leftX = TabsBarWidth + SectionsPadding
