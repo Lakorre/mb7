@@ -65,11 +65,11 @@ MachoMenuSetAccent(MenuWindow, 79, 50, 50)
 --     end)
 -- end
 
--- تعريف التبويب الأول وربطه بدالة VIPTabContent
-local VIPTab1 = MachoMenuAddTab(MenuWindow, "1:", VIPTabContent)
+-- إنشاء التبويب الأول
+local VIPTab = MachoMenuAddTab(MenuWindow, "1:")
 
--- تعريف التبويب الثاني وربطه بدالة VIPTab2Content
-local VIPTab2 = MachoMenuAddTab(MenuWindow, "2:", VIPTab2Content)
+-- إنشاء التبويب الثاني (الجديد)
+local SecondTab = MachoMenuAddTab(MenuWindow, "2:")
 
 -- Tab Content
 local function PlayerTabContent(tab)
@@ -184,19 +184,6 @@ local function VIPTabContent(tab)
     local rightX = leftX + ColumnWidth + SectionsPadding
 
     -- تأكد من إرجاع SectionThree ضمن القائمة
-    return SectionOne, SectionTwo, SectionThree, SectionFour
-end
-
--- تعريف محتوى الصفحة الثانية (فارغة الآن وجاهزة للإضافة)
-local function VIPTab2Content(tab)
-    local leftX = TabsBarWidth + SectionsPadding
-    local topY = SectionsPadding + MachoPanelGap
-    
-    -- إنشاء القسم في الصفحة الثانية بدون أي أزرار بداخله
-    local SectionNew = MachoMenuGroup(tab, "New Section", leftX, topY, leftX + ColumnWidth, topY + HalfHeight)
-
-    -- تم حذف Plate Change و Delete Vehicle من هنا
-
     return SectionOne, SectionTwo, SectionThree, SectionFour
 end
 
