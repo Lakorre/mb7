@@ -65,7 +65,8 @@ MachoMenuSetAccent(MenuWindow, 79, 50, 50)
 --     end)
 -- end
 
--- إنشاء التبويب الأول
+-- CreateRainbowInterface()
+MachoMenuText(MenuWindow, "")
 local VIPTab = MachoMenuAddTab(MenuWindow, "1:")
 
 -- Tab Content
