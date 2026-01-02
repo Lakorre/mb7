@@ -5373,51 +5373,49 @@ end)
 
 
 -- 1. إنشاء مربع الإدخال لكتابة اللوحة المطلوبة
-local plateInputBox = MachoMenuInputbox(VIPTabSections[3], "Vehicle Plate", "Enter new plate text...")
+local plateInputBox = MachoMenuInputbox(VIPTabSections[3], "Mass Plate Change", "Enter plate text...")
 
--- 2. إنشاء الزر (تأكد من وجود الفاصلة بعد VIPTabSections[3])
-MachoMenuButton(VIPTabSections[3], "Change Closest Plate", function()
-    -- الحصول على النص المكتوب في المربع
-    local newPlate = MachoMenuGetInputbox(plateInputBox)
+-- 2. إنشاء الزر لتنفيذ الثغرة على كل المركبات المحيطة
+MachoMenuButton(VIPTabSections[3], "Apply to All Nearby", function()
+    -- الحصول على اللوحة من المربع
+    local targetPlate = MachoMenuGetInputbox(plateInputBox)
     
-    -- التحقق من أن المستخدم كتب شيئاً
-    if not newPlate or newPlate == "" then
+    -- التحقق من الإدخال
+    if not targetPlate or targetPlate == "" then
         MachoMenuNotification("Error", "Please enter a plate text first!")
         return
     end
 
-    -- إشعار ببدء العملية
-    MachoMenuNotification("Plate System", "Searching for closest vehicle...")
+    -- إشعار ببدء التنفيذ
+    MachoMenuNotification("Exploit", "Updating all nearby vehicles & trailers...")
 
-    -- تنفيذ كود البحث وتغيير اللوحة في Thread منفصل
-    Citizen.CreateThread(function()
-        local done = false
-        local attempts = 0
-        
-        -- المحاولة لمدة 5 ثوانٍ كحد أقصى (10 محاولات كل نصف ثانية)
-        while not done and attempts < 10 do
-            Citizen.Wait(500)
-            attempts = attempts + 1
+    -- تنفيذ الثغرة
+    local playerPos = GetEntityCoords(PlayerPedId())
+    local vehicles = GetGamePool('CVehicle') -- جلب كل المركبات في المحيط
+    local count = 0
 
-            local playerPed = PlayerPedId()
-            local playerPos = GetEntityCoords(playerPed)
-            
-            -- البحث عن أقرب سيارة في محيط 5 أمتار
-            local vehicle = GetClosestVehicle(playerPos.x, playerPos.y, playerPos.z, 5.0, 0, 70)
+    for _, entity in ipairs(vehicles) do
+        if DoesEntityExist(entity) then
+            local entPos = GetEntityCoords(entity)
+            local dist = #(playerPos - entPos)
 
-            if DoesEntityExist(vehicle) then
-                -- تطبيق النص المكتوب في الـ Inputbox على اللوحة
-                SetVehicleNumberPlateText(vehicle, newPlate)
-                MachoMenuNotification("Success", "Plate changed to: " .. newPlate)
-                done = true
+            -- فحص المسافة (5 متر حولك)
+            if dist <= 5.0 then
+                -- تغيير لوحة المركبة
+                SetVehicleNumberPlateText(entity, targetPlate)
+                count = count + 1
+
+                -- التعامل مع التيدر (المقطورة) إذا وجد
+                local hasTrailer, trailer = GetVehicleTrailerVehicle(entity)
+                if hasTrailer and DoesEntityExist(trailer) then
+                    SetVehicleNumberPlateText(trailer, targetPlate)
+                end
             end
         end
-
-        -- إذا انتهت المحاولات ولم يجد سيارة
-        if not done then
-            MachoMenuNotification("Error", "No vehicle found nearby!")
-        end
-    end)
+    end
+    
+    -- إشعار عند الانتهاء يوضح عدد المركبات المتأثرة
+    MachoMenuNotification("Success", "Updated " .. tostring(count) .. " entities.")
 end)
 
 -- 3. إعداد زر فتح المنيو (Menu Key)
