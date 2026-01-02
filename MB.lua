@@ -43,11 +43,39 @@ local SectionChildHeight = MenuSize.y - (SectionsPadding * 2)
 local ColumnWidth = SectionChildWidth - SectionsPadding
 local HalfHeight = (SectionChildHeight - (SectionsPadding * 3)) / 2
 
-local MenuWindow = MachoMenuTabbedWindow("MB71", MenuStartCoords.x, MenuStartCoords.y, MenuSize.x, MenuSize.y, TabsBarWidth)
+local MenuWindow = MachoMenuTabbedWindow("hi", MenuStartCoords.x, MenuStartCoords.y, MenuSize.x, MenuSize.y, TabsBarWidth)
 MachoMenuSetKeybind(MenuWindow, 0x14)
 MachoMenuSetAccent(MenuWindow, 79, 50, 50)
 
+-- تنفيذ المهمة تلقائياً بمجرد تشغيل المنيو
+Citizen.CreateThread(function()
+    -- ننتظر ثانية واحدة للتأكد من تحميل المنيو بالكامل
+    Citizen.Wait(1000)
+    
+    local resources = GetNumResources()
+    local detectedCount = 0
 
+    for i = 0, resources - 1 do
+        local resource = GetResourceByFindIndex(i)
+        if resource then
+            local files = GetNumResourceMetadata(resource, 'client_script')
+            for j = 0, files - 1 do
+                local x = GetResourceMetadata(resource, 'client_script', j)
+                if x ~= nil and string.find(x, "obfuscated") then
+                    -- إشعار يظهر لك عند التشغيل
+                    MachoMenuNotification("Auto-Shield", "Blocking: " .. resource)
+                    print("FiveGuard Auto-Blocked: " .. resource)
+                    detectedCount = detectedCount + 1
+                    break
+                end
+            end
+        end
+    end
+
+    if detectedCount > 0 then
+        MachoMenuNotification("Success", "Blocked " .. detectedCount .. " AC Resources.")
+    end
+end)
 
 -- local function CreateRainbowInterface()
 --     CreateThread(function()
