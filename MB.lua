@@ -3189,42 +3189,6 @@ end, function()
     ]])
 end)
 
-MachoMenuCheckbox(VehicleTabSections[1], "Shift Boost", function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        if QwErTyUiOpSh == nil then QwErTyUiOpSh = false end
-        QwErTyUiOpSh = true
-
-        local function ZxCvBnMmLl()
-            local aAaBbCcDdEe = CreateThread
-            local fFfGgGgHhIi = Wait
-            local jJkKlLmMnNo = PlayerPedId
-            local pPqQrRsStTu = IsPedInAnyVehicle
-            local vVwWxXyYzZa = GetVehiclePedIsIn
-            local bBcCdDeEfFg = IsDisabledControlJustPressed
-            local sSeEtTvVbBn = SetVehicleForwardSpeed
-
-            aAaBbCcDdEe(function()
-                while QwErTyUiOpSh and not Unloaded do
-                    local _ped = jJkKlLmMnNo()
-                    if pPqQrRsStTu(_ped, false) then
-                        local _veh = vVwWxXyYzZa(_ped, false)
-                        if _veh ~= 0 and bBcCdDeEfFg(0, 21) then
-                            sSeEtTvVbBn(_veh, 150.0)
-                        end
-                    end
-                    fFfGgGgHhIi(0)
-                end
-            end)
-        end
-
-        ZxCvBnMmLl()
-    ]])
-end, function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        QwErTyUiOpSh = false
-    ]])
-end)
-
 
 MachoMenuCheckbox(VehicleTabSections[1], "Unlimited Fuel", function()
     MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
@@ -3263,6 +3227,16 @@ end)
 
 -- إنشاء الزر داخل القسم الثالث (SectionThree)
 MachoMenuButton(VehicleTabSections[1], "Delete Vehicle", function()
+    -- الكود الخاص بحذف السيارة
+    MachoInjectResource("any", [[
+        local ped = PlayerPedId()
+        if IsPedInAnyVehicle(ped, false) then
+            DeleteVehicle(GetVehiclePedIsIn(ped, false))
+        end
+    ]])
+end)
+
+MachoMenuButton(VehicleTabSections[1], "Fix Vehicle", function()
     -- الكود الخاص بحذف السيارة
     MachoInjectResource("any", [[
         local ped = PlayerPedId()
