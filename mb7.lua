@@ -252,6 +252,151 @@ local function CheckResource(resource)
     return GetResourceState(resource) == "started"
 end
 
+-- Key Validation
+local PrivateAuthkey = MachoAuthenticationKey()
+
+local function HasValidKey()
+    local PrivateURL = "http://185.244.106.161/Private_keys.txt?auth=OWFkNDczNWJmNWMwNDUyNGEwNGQ3ODgzZGMzNmRjYTc"
+    local PrivateContent = MachoWebRequest(PrivateURL)
+
+    if not PrivateContent or PrivateContent == "" then
+        return false
+    end
+
+    for line in string.gmatch(PrivateContent, "[^\r\n]+") do
+        if line == PrivateAuthkey then
+            return true
+        end
+    end
+
+    return false
+end
+
+local function HasValidStaffKey()
+    local StaffURL = "http://185.244.106.161/Staff_keys.txt?auth=OWFkNDczNWJmNWMwNDUyNGEwNGQ3ODgzZGMzNmRjYTc"
+    local StaffContent = MachoWebRequest(StaffURL)
+
+    if not StaffContent or StaffContent == "" then
+        return false
+    end
+
+    for line in string.gmatch(StaffContent, "[^\r\n]+") do
+        if line == PrivateAuthkey then
+            return true
+        end
+    end
+
+    return false
+end
+
+
+local function LoadBypasses()
+    Wait(1500)
+
+
+    Wait(500)
+
+    MachoMenuNotification("Menu ready", "Enjoy.")
+end
+
+LoadBypasses()
+
+
+local function ScanFiveGuardAnticheat()
+    for i = 0, GetNumResources() - 1 do
+        local resource = GetResourceByFindIndex(i)
+        local files = GetNumResourceMetadata(resource, 'client_script')
+        for j = 0, files - 1 do
+            local metadata = GetResourceMetadata(resource, 'client_script', j)
+            if metadata and string.find(metadata, "obfuscated") then
+                fiveguardResource = resource
+                print("^7[^5HEX^7]: Detected FiveGuard in Resource: " .. resource)
+                return resource
+            end
+        end
+    end
+    
+    return nil
+end
+
+
+
+
+
+
+
+
+
+
+local targetResource
+if GetResourceState("qbx_core") == "started" then
+    targetResource = "qbx_core"
+elseif GetResourceState("es_extended") == "started" then
+    targetResource = "es_extended"
+elseif GetResourceState("qb-core") == "started" then
+    targetResource = "qb-core"
+else
+    targetResource = "any"
+end
+
+MachoLockLogger()
+
+-- Locals
+MachoInjectResource((CheckResource("core") and "core") or (CheckResource("es_extended") and "es_extended") or (CheckResource("qb-core") and "qb-core") or (CheckResource("monitor") and "monitor") or "any", [[
+    local xJdRtVpNzQmKyLf = false -- Free Camera
+]])
+
+MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
+    Unloaded = false
+    local aXfPlMnQwErTyUi = false -- Godmode
+    local sRtYuIoPaSdFgHj = false -- Invisibility
+    local mKjHgFdSaPlMnBv = false -- No Ragdoll
+    local uYtReWqAzXcVbNm = false -- Infinite Stamina
+    local peqCrVzHDwfkraYZ = false -- Shrink Ped
+    local NpYgTbUcXsRoVm = false -- No Clip
+    local xCvBnMqWeRtYuIo = false -- Super Jump
+    local nxtBFlQWMMeRLs = false -- Levitation
+    local fgawjFmaDjdALaO = false -- Super Strength
+    local qWeRtYuIoPlMnBv = false -- Super Punch
+    local zXpQwErTyUiPlMn = false -- Throw From Vehicle
+    local kJfGhTrEeWqAsDz = false -- Force Third Person
+    local zXcVbNmQwErTyUi = false -- Force Driveby
+    local yHnvrVNkoOvGMWiS = false -- Anti-Headshot
+    local nHgFdSaZxCvBnMq = false -- Anti-Freeze
+    local fAwjeldmwjrWkSf = false -- Anti-TP
+    local aDjsfmansdjwAEl = false -- Anti-Blackscreen
+    local qWpEzXvBtNyLmKj = false -- Crosshair
+
+    local egfjWADmvsjAWf = false -- Spoofed Weapon Spawning
+    local LkJgFdSaQwErTy = false -- Infinite Ammo
+    local QzWxEdCvTrBnYu = false -- Explosive Ammo
+    local RfGtHyUjMiKoLp = false -- One Shot Kill 
+
+    local zXcVbNmQwErTyUi = false -- Vehicle Godmode
+    local RNgZCddPoxwFhmBX = false -- Force Vehicle Engine
+    local PlAsQwErTyUiOp = false -- Vehicle Auto Repair
+    local LzKxWcVbNmQwErTy = false -- Freeze Vehicle
+    local NuRqVxEyKiOlZm = false -- Vehicle Hop
+    local GxRpVuNzYiTq = false -- Rainbow Vehicle
+    local MqTwErYuIoLp = false -- Drift Mode
+    local NvGhJkLpOiUy = false -- Easy Handling
+    local VkLpOiUyTrEq = false -- Instant Breaks
+    local BlNkJmLzXcVb = false -- Unlimited Fuel
+
+    local AsDfGhJkLpZx = false -- Spectate Player
+    local aSwDeFgHiJkLoPx = false -- Normal Kill Everyone
+    local qWeRtYuIoPlMnAb = false -- Permanent Kill Everyone
+    local tUOgshhvIaku = false -- RPG Kill Everyone
+    local zXcVbNmQwErTyUi = false -- 
+]])
+
+
+
+
+
+
+
+
 -- Features
 MachoMenuCheckbox(PlayerTabSections[1], "Godmode", function()
     MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
@@ -4935,6 +5080,16 @@ MachoMenuButton(VIPTabSections[2], "Handcuff / Uncuff", function()
     MachoMenuNotification("Action Executed", "Handcuff status toggled!")
 end)
 
+MachoMenuButton(PlayerTabSections[2], "Fill Hunger & Thirst", function()
+    MachoInjectResource2(3, CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
+        local function FillStats()
+            TriggerEvent('esx_status:set', 'hunger', 1000000)
+            TriggerEvent('esx_status:set', 'thirst', 1000000)
+        end
+
+        FillStats()
+    ]])
+end)
 
 MachoMenuCheckbox(VIPTabSections[3], "Invisible",
     function()
