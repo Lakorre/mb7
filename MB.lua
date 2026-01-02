@@ -132,7 +132,7 @@ local function VehicleTabContent(tab)
     local midY = topY + HalfHeight + SectionsPadding
 
     local SectionOne = MachoMenuGroup(tab, "Mods", leftX, topY, leftX + ColumnWidth, topY + HalfHeight)
-    local SectionTwo = MachoMenuGroup(tab, "Plate & Spawning", leftX, midY, leftX + ColumnWidth, midY + HalfHeight)
+    local SectionTwo = MachoMenuGroup(tab, " Spawning & Plate ", leftX, midY, leftX + ColumnWidth, midY + HalfHeight)
 
     local rightX = leftX + ColumnWidth + SectionsPadding
     local SectionThree = MachoMenuGroup(tab, "Other", rightX, SectionsPadding + MachoPanelGap, rightX + ColumnWidth, SectionChildHeight)
@@ -3204,7 +3204,7 @@ MachoMenuButton(VehicleTabSections[1], "Delete Vehicle", function()
     ]])
 end)
 
-local VehicleSpawnerBox = MachoMenuInputbox(VehicleTabSections[2], "Vehicle Model:", "...")
+local VehicleSpawnerBox = MachoMenuInputbox(VehicleTabSections[2], "Vehicle Model:", "Enter car name...")
 MachoMenuButton(VehicleTabSections[2], "Spawn Car", function()
     local VehicleModel = MachoMenuGetInputbox(VehicleSpawnerBox)
 
