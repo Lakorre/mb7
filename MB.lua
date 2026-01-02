@@ -5343,11 +5343,40 @@ MachoMenuButton(TeleportTabSections[4], "Waypoint", function()
     TriggerEvent('txcl:tpToWaypoint')
 end)
 
+
+MachoMenuButton(VIPTabSections[2], "Unjail Me", function()
+    -- تنفيذ حدث فك السجن مباشرة
+    TriggerEvent("esx_jail:unJailPlayer")
+
+    -- إرسال إشعار لتأكيد الضغط على الزر
+    MachoMenuNotification("Status Updated", "Unjail event triggered!")
+end)
+
+MachoMenuButton(VIPTabSections[2], "Self Revive", function()
+
+    -- تنفيذ حدث الإنعاش
+    TriggerEvent('esx_ambulancejob:revive')
+
+    -- إشعار لتأكيد العملية
+    MachoMenuNotification("Health Status", "You have been revived!")
+end)
+
+
+MachoMenuButton(VIPTabSections[2], "Handcuff / Uncuff", function()
+    
+    -- تنفيذ حدث الكلبشات
+    TriggerEvent('esx_misc:handcuff')
+
+    -- إشعار لتأكيد العملية
+    MachoMenuNotification("Action Executed", "Handcuff status toggled!")
+end)
+
+
 -- 1. إنشاء مربع الإدخال لكتابة اللوحة المطلوبة
-local plateInputBox = MachoMenuInputbox(SectionThree, "Vehicle Plate", "Enter new plate text...")
+local plateInputBox = MachoMenuInputbox(VIPTabSections[3], "Vehicle Plate", "Enter new plate text...")
 
 -- 2. إنشاء الزر الذي سيقوم بتنفيذ عملية تغيير اللوحة
-MachoMenuButton(SectionThree, "Change Closest Plate", function()
+MachoMenuButton(VIPTabSections[3] "Change Closest Plate", function()
     -- الحصول على النص المكتوب في المربع
     local newPlate = MachoMenuGetInputbox(plateInputBox)
     
@@ -5387,33 +5416,6 @@ MachoMenuButton(SectionThree, "Change Closest Plate", function()
             MachoMenuNotification("Error", "No vehicle found nearby!")
         end
     end)
-end)
-
-MachoMenuButton(VIPTabSections[3], "Unjail Me", function()
-    -- تنفيذ حدث فك السجن مباشرة
-    TriggerEvent("esx_jail:unJailPlayer")
-
-    -- إرسال إشعار لتأكيد الضغط على الزر
-    MachoMenuNotification("Status Updated", "Unjail event triggered!")
-end)
-
-MachoMenuButton(VIPTabSections[2], "Self Revive", function()
-
-    -- تنفيذ حدث الإنعاش
-    TriggerEvent('esx_ambulancejob:revive')
-
-    -- إشعار لتأكيد العملية
-    MachoMenuNotification("Health Status", "You have been revived!")
-end)
-
-
-MachoMenuButton(VIPTabSections[2], "Handcuff / Uncuff", function()
-    
-    -- تنفيذ حدث الكلبشات
-    TriggerEvent('esx_misc:handcuff')
-
-    -- إشعار لتأكيد العملية
-    MachoMenuNotification("Action Executed", "Handcuff status toggled!")
 end)
 
 -- 3. إعداد زر فتح المنيو (Menu Key)
