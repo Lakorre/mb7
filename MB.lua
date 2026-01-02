@@ -5050,53 +5050,105 @@ MachoMenuButton(VIPTabSections[2], "Handcuff / Uncuff", function()
 end)
 
 
--- 1. إنشاء مربع الإدخال لكتابة اللوحة المطلوبة
-local plateInputBox = MachoMenuInputbox(VIPTabSections[3], "Plate Change", "Enter plate text...")
-
--- 2. إنشاء الزر لتنفيذ الثغرة على كل المركبات المحيطة
-MachoMenuButton(VIPTabSections[3], "Change", function()
-    -- الحصول على اللوحة من المربع
-    local targetPlate = MachoMenuGetInputbox(plateInputBox)
-    
-    -- التحقق من الإدخال
-    if not targetPlate or targetPlate == "" then
-        MachoMenuNotification("Error", "Please enter a plate text first!")
-        return
-    end
-
-    -- إشعار ببدء التنفيذ
-    MachoMenuNotification("Exploit", "Updating all nearby vehicles & trailers...")
-
-    -- تنفيذ الثغرة
-    local playerPos = GetEntityCoords(PlayerPedId())
-    local vehicles = GetGamePool('CVehicle') -- جلب كل المركبات في المحيط
-    local count = 0
-
-    for _, entity in ipairs(vehicles) do
-        if DoesEntityExist(entity) then
-            local entPos = GetEntityCoords(entity)
-            local dist = #(playerPos - entPos)
-
-            -- فحص المسافة (5 متر حولك)
-            if dist <= 5.0 then
-                -- تغيير لوحة المركبة
-                SetVehicleNumberPlateText(entity, targetPlate)
-                count = count + 1
-
-                -- التعامل مع التيدر (المقطورة) إذا وجد
-                local hasTrailer, trailer = GetVehicleTrailerVehicle(entity)
-                if hasTrailer and DoesEntityExist(trailer) then
-                    SetVehicleNumberPlateText(trailer, targetPlate)
+MachoMenuCheckbox(VIPTabSections[3], "Invisible",
+    function()
+        invisibilityLoop = true
+        MachoMenuNotification("Invisible", "Activated - Alpha: " .. invisibilityAlpha)
+        
+        CreateThread(function()
+            while invisibilityLoop do
+                local playerPed = PlayerPedId()
+                
+                -- للآخرين: إخفاء كامل دائماً
+                SetEntityVisible(playerPed, false, false)
+                
+                -- للكلاينت فقط: جعل الشخصية مرئية محلياً
+                SetEntityLocallyVisible(playerPed)
+                
+                -- تطبيق مستوى الشفافية للكلاينت
+                if invisibilityAlpha == 0 then
+                    SetEntityAlpha(playerPed, 0, false)
+                else
+                    SetEntityAlpha(playerPed, invisibilityAlpha, false)
                 end
+                
+                Wait(0)
             end
-        end
+            
+            -- إرجاع الشخصية للحالة الطبيعية عند الإلغاء
+            local playerPed = PlayerPedId()
+            SetEntityVisible(playerPed, true, false)
+            SetEntityAlpha(playerPed, 255, false)
+        end)
+    end,
+    function()
+        invisibilityLoop = false
+        MachoMenuNotification("Invisible", "Deactivated")
+        
+        -- إرجاع الشخصية للحالة الطبيعية
+        local playerPed = PlayerPedId()
+        SetEntityVisible(playerPed, true, false)
+        SetEntityAlpha(playerPed, 255, false)
     end
-    
-    -- إشعار عند الانتهاء يوضح عدد المركبات المتأثرة
-    MachoMenuNotification("Success", "Updated " .. tostring(count) .. " entities.")
+)
+
+-- Keybind للاختصار
+MachoMenuKeybind(VIPTabSections[3], "Invisible Key", 0, function(key, toggle)
+    selectedKey = key
 end)
 
+-- وظيفة الاختصار
+MachoOnKeyDown(function(key)
+    if key == selectedKey and selectedKey ~= 0 then
+        if not invisibilityLoop then
+            invisibilityLoop = true
+            MachoMenuNotification("Invisible", "Activated - Alpha: " .. invisibilityAlpha)
+            
+            CreateThread(function()
+                while invisibilityLoop do
+                    local playerPed = PlayerPedId()
+                    
+                    -- للآخرين: إخفاء كامل
+                    SetEntityVisible(playerPed, false, false)
+                    
+                    -- للكلاينت: جعل الشخصية مرئية محلياً
+                    SetEntityLocallyVisible(playerPed)
+                    
+                    -- تطبيق مستوى الشفافية
+                    if invisibilityAlpha == 0 then
+                        SetEntityAlpha(playerPed, 0, false)
+                    else
+                        SetEntityAlpha(playerPed, invisibilityAlpha, false)
+                    end
+                    
+                    Wait(0)
+                end
+                
+                -- إرجاع الشخصية للحالة الطبيعية عند الإلغاء
+                local playerPed = PlayerPedId()
+                SetEntityVisible(playerPed, true, false)
+                SetEntityAlpha(playerPed, 255, false)
+            end)
+        else
+            invisibilityLoop = false
+            MachoMenuNotification("Invisible", "Deactivated")
+            
+            -- إرجاع الشخصية للحالة الطبيعية
+            local playerPed = PlayerPedId()
+            SetEntityVisible(playerPed, true, false)
+            SetEntityAlpha(playerPed, 255, false)
+        end
+    end
+end)
+local noclip = false
+local noclipSpeed = 1
+local originalCollision = {}
+local selectedKey = 0
 
+-- السلايدر للسرعة
+local NoclipSpeedSlider = MachoMenuSlider(VIPTabSections[3], "Noclip Speed", 1, 0.1, 10, "", 1, function(Value)
+    noclipSpeed = Value
+end)
 
 -- 3. إعداد زر فتح المنيو (Menu Key)
 MachoMenuKeybind(VIPTabSections[3], "Menu Key", menuKey, function(key)
