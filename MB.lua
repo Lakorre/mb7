@@ -3236,13 +3236,23 @@ MachoMenuButton(VehicleTabSections[1], "Delete Vehicle", function()
     ]])
 end)
 
-MachoMenuButton(VehicleTabSections[1], "Fix Vehicle", function()
-    -- الكود الخاص بحذف السيارة
-    MachoInjectResource("any", [[
-        local ped = PlayerPedId()
-        if IsPedInAnyVehicle(ped, false) then
-            DeleteVehicle(GetVehiclePedIsIn(ped, false))
+MachoMenuButton(VehicleTabSections[1], "Repair Vehicle", function()
+    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
+        local function FgN7LqxZyP()
+            local aBcD = PlayerPedId
+            local eFgH = GetVehiclePedIsIn
+            local iJkL = SetVehicleFixed
+            local mNoP = SetVehicleDeformationFixed
+
+            local p = aBcD()
+            local v = eFgH(p, false)
+            if v and v ~= 0 then
+                iJkL(v)
+                mNoP(v)
+            end
         end
+
+        FgN7LqxZyP()
     ]])
 end)
 
@@ -3378,26 +3388,6 @@ MachoMenuButton(VehicleTabSections[2], "Change", function()
     
     -- إشعار عند الانتهاء يوضح عدد المركبات المتأثرة
     MachoMenuNotification("Success", "Updated " .. tostring(count) .. " entities.")
-end)
-
-MachoMenuButton(VehicleTabSections[3], "Repair Vehicle", function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        local function FgN7LqxZyP()
-            local aBcD = PlayerPedId
-            local eFgH = GetVehiclePedIsIn
-            local iJkL = SetVehicleFixed
-            local mNoP = SetVehicleDeformationFixed
-
-            local p = aBcD()
-            local v = eFgH(p, false)
-            if v and v ~= 0 then
-                iJkL(v)
-                mNoP(v)
-            end
-        end
-
-        FgN7LqxZyP()
-    ]])
 end)
 
 MachoMenuButton(VehicleTabSections[3], "Flip Vehicle", function()
