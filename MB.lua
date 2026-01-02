@@ -5140,10 +5140,6 @@ MachoOnKeyDown(function(key)
         end
     end
 end)
--- السلايدر للسرعة
-local NoclipSpeedSlider = MachoMenuSlider(VIPTabSections[2], "Noclip Speed", 1, 0.1, 10, "", 1, function(Value)
-    noclipSpeed = Value
-end)
 
 -- 3. إعداد زر فتح المنيو (Menu Key)
 MachoMenuKeybind(VIPTabSections[3], "Menu Key", menuKey, function(key)
