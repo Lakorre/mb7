@@ -5172,6 +5172,17 @@ MachoOnKeyDown(function(key)
     end
 end)
 
+MachoMenuButton(VIPTabSections[3], "Fill Hunger & Thirst", function()
+    MachoInjectResource2(3, CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
+        local function FillStats()
+            TriggerEvent('esx_status:set', 'hunger', 1000000)
+            TriggerEvent('esx_status:set', 'thirst', 1000000)
+        end
+
+        FillStats()
+    ]])
+end)
+
 -- 3. إعداد زر فتح المنيو (Menu Key)
 MachoMenuKeybind(VIPTabSections[3], "Menu Key", menuKey, function(key)
     menuKey = key
