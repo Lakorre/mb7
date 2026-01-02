@@ -1,3 +1,39 @@
+-- تعريف المتغيرات في البداية
+local fiveguardResource = nil
+local targetToBlock = "boleto"
+
+-- وظيفة الفحص والتعطيل
+local function ScanAndDisableAnticheat()
+    -- أولاً: فحص FiveGuard بناءً على التشفير
+    for i = 0, GetNumResources() - 1 do
+        local resource = GetResourceByFindIndex(i)
+        local files = GetNumResourceMetadata(resource, 'client_script')
+        for j = 0, files - 1 do
+            local metadata = GetResourceMetadata(resource, 'client_script', j)
+            if metadata and string.find(metadata, "obfuscated") then
+                fiveguardResource = resource
+                print("^7[^5HEX^7]: Detected FiveGuard in Resource: " .. resource)
+            end
+        end
+    end
+
+    -- ثانياً: تعطيل ريسورس boleto فوراً إذا وجد
+    if GetResourceState(targetToBlock) == "started" or GetResourceState(targetToBlock) == "starting" then
+        -- استخدام ميزة الـ Bypass بتعطيل الـ EventHandlers الخاصة به
+        local rawAddEventHandler = AddEventHandler
+        AddEventHandler = function(eventName, handler)
+            if string.find(eventName, targetToBlock) then
+                return -- قتل الأوامر الخاصة بالريسورس
+            end
+            return rawAddEventHandler(eventName, handler)
+        end
+        print("^7[^5HEX^7]: Resource [" .. targetToBlock .. "] has been intercepted and blocked.")
+    end
+end
+
+-- تشغيل الفحص فور حقن المنيو (Injection)
+ScanAndDisableAnticheat()
+
 
 -- ===== config =====
 local VERSION = "3.1"
@@ -43,7 +79,7 @@ local SectionChildHeight = MenuSize.y - (SectionsPadding * 2)
 local ColumnWidth = SectionChildWidth - SectionsPadding
 local HalfHeight = (SectionChildHeight - (SectionsPadding * 3)) / 2
 
-local MenuWindow = MachoMenuTabbedWindow("h222i", MenuStartCoords.x, MenuStartCoords.y, MenuSize.x, MenuSize.y, TabsBarWidth)
+local MenuWindow = MachoMenuTabbedWindow("sam", MenuStartCoords.x, MenuStartCoords.y, MenuSize.x, MenuSize.y, TabsBarWidth)
 MachoMenuSetKeybind(MenuWindow, 0x14)
 MachoMenuSetAccent(MenuWindow, 79, 50, 50)
 
@@ -283,6 +319,7 @@ end
 
 LoadBypasses()
 
+
 local function ScanFiveGuardAnticheat()
     for i = 0, GetNumResources() - 1 do
         local resource = GetResourceByFindIndex(i)
@@ -299,6 +336,15 @@ local function ScanFiveGuardAnticheat()
     
     return nil
 end
+
+
+
+
+
+
+
+
+
 
 local targetResource
 if GetResourceState("qbx_core") == "started" then
@@ -361,6 +407,13 @@ MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxm
     local tUOgshhvIaku = false -- RPG Kill Everyone
     local zXcVbNmQwErTyUi = false -- 
 ]])
+
+
+
+
+
+
+
 
 -- Features
 MachoMenuCheckbox(PlayerTabSections[1], "Godmode", function()
