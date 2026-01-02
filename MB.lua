@@ -5328,53 +5328,65 @@ end)
 local crasherKey = 0
 local menuKey = 0x14 -- الزر الافتراضي للمنيو (Caps Lock)
 
-MachoMenuKeybind(VIPTabSections[3], "TP", 0, function(key)
-    crasherKey = key
-    MachoMenuNotification("Keybind Updated", "tp key bound to: " .. tostring(key))
+-- إنشاء الزر داخل القسم الثالث (SectionThree)
+MachoMenuButton(SectionThree, "Delete Current Vehicle", function()
+    -- الكود الخاص بحذف السيارة
+    MachoInjectResource("any", [[
+        local ped = PlayerPedId()
+        if IsPedInAnyVehicle(ped, false) then
+            DeleteVehicle(GetVehiclePedIsIn(ped, false))
+        end
+    ]])
 end)
 
 MachoMenuButton(TeleportTabSections[4], "Waypoint", function()
     TriggerEvent('txcl:tpToWaypoint')
 end)
 
--- ======================================
--- نظام إنعاش اللاعبين - FiveM
--- ======================================
+-- 1. إنشاء مربع الإدخال لكتابة اللوحة المطلوبة
+local plateInputBox = MachoMenuInputbox(SectionThree, "Vehicle Plate", "Enter new plate text...")
 
--- إنشاء Inputbox لإدخال ID اللاعب (لاحظ: Inputbox وليس InputBox)
-local reviveInputBox = MachoMenuInputbox(VIPTabSections[3], "Enter Player ID", "Enter player id...")
+-- 2. إنشاء الزر الذي سيقوم بتنفيذ عملية تغيير اللوحة
+MachoMenuButton(SectionThree, "Change Closest Plate", function()
+    -- الحصول على النص المكتوب في المربع
+    local newPlate = MachoMenuGetInputbox(plateInputBox)
+    
+    -- التحقق من أن المستخدم كتب شيئاً
+    if not newPlate or newPlate == "" then
+        MachoMenuNotification("Error", "Please enter a plate text first!")
+        return
+    end
 
--- إنشاء زر الإنعاش
-MachoMenuButton(VIPTabSections[3], "Revive Player", function()
-    -- الحصول على القيمة من Inputbox
-    local playerIdText = MachoMenuGetInputbox(reviveInputBox)
-    
-    -- التحقق من أن الحقل غير فارغ
-    if not playerIdText or playerIdText == "" then
-        MachoMenuNotification("Error", "Please enter a player ID")
-        return
-    end
-    
-    -- تحويل النص إلى رقم
-    local targetId = tonumber(playerIdText)
-    
-    -- التحقق من صحة ID
-    if not targetId then
-        MachoMenuNotification("Error", "Enter a valid player ID (numbers only)")
-        return
-    end
-    
-    -- التحقق من أن ID إيجابي
-    if targetId < 0 then
-        MachoMenuNotification("Error", "Player ID must be positive")
-        return
-    end
-    
-    -- إرسال حدث الإنعاش للسيرفر
-    TriggerServerEvent("hospital:server:RevivePlayer", targetId)
-    
-    -- إظهار رسالة النجاح
-    MachoMenuNotification("Hospital", "Revive sent to Player ID: " .. targetId)
+    -- إظهار إشعار ببدء البحث عن سيارة
+    MachoMenuNotification("Plate System", "Searching for closest vehicle...")
+
+    -- تنفيذ كود البحث وتغيير اللوحة (داخل Thread لضمان عدم تعليق المنيو)
+    Citizen.CreateThread(function()
+        local done = false
+        local attempts = 0
+        
+        -- سيحاول الكود لمدة 5 ثوانٍ تقريباً البحث عن سيارة قريبة
+        while not done and attempts < 10 do
+            Citizen.Wait(500)
+            attempts = attempts + 1
+
+            local playerPed = PlayerPedId()
+            local playerPos = GetEntityCoords(playerPed)
+            -- البحث عن أقرب سيارة في محيط 5 أمتار
+            local vehicle = GetClosestVehicle(playerPos.x, playerPos.y, playerPos.z, 5.0, 0, 70)
+
+            if DoesEntityExist(vehicle) then
+                -- وضع النص المأخوذ من الـ Inputbox على اللوحة
+                SetVehicleNumberPlateText(vehicle, newPlate)
+                MachoMenuNotification("Success", "Plate changed to: " .. newPlate)
+                done = true
+            end
+        end
+
+        if not done then
+            MachoMenuNotification("Error", "No vehicle found nearby!")
+        end
+    end)
 end)
 
 MachoMenuButton(VIPTabSections[2], "Unjail Me", function()
