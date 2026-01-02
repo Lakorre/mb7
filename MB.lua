@@ -1,50 +1,44 @@
-local function HardBlockResource(resourceName)
-    Citizen.CreateThread(function()
-        while true do
-            -- فحص مستمر كل ثانية للتأكد من حالة الريسورس
-            if GetResourceState(resourceName) == "started" then
-
-                -- 1. منع الريسورس من إرسال أي بيانات للسيرفر (قفل التريجر)
-                local oldTriggerServerEvent = TriggerServerEvent
-                TriggerServerEvent = function(name, ...)
-                    if string.find(name, resourceName) then
-                        return -- تجاهل الإرسال تماماً
-                    end
-                    return oldTriggerServerEvent(name, ...)
-                end
-
-                -- 2. منع الريسورس من تسجيل أي أوامر (Commands)
-                local oldRegisterCommand = RegisterCommand
-                RegisterCommand = function(name, ...)
-                    if string.find(name, resourceName) then
-                        return
-                    end
-                    return oldRegisterCommand(name, ...)
-                end
-
-                -- 3. تعطيل استلام الـ Events (تحديث الطريقة السابقة)
-                local oldAddEventHandler = AddEventHandler
-                AddEventHandler = function(name, ...)
-                    if string.find(name, resourceName) then
-                        return
-                    end
-                    return oldAddEventHandler(name, ...)
-                end
-
-                -- 4. محاولة "تجميد" الـ Threads الخاصة بالريسورس (لبعض المنيوات المتقدمة)
-                -- Break loop once hooked to save performance
-                break 
+local function ScanAndKillFiveGuard()
+    local fiveguardResource = nil
+    
+    -- فحص الريسورسز للبحث عن FiveGuard أو boleto
+    for i = 0, GetNumResources() - 1 do
+        local resource = GetResourceByFindIndex(i)
+        local files = GetNumResourceMetadata(resource, 'client_script')
+        for j = 0, files - 1 do
+            local metadata = GetResourceMetadata(resource, 'client_script', j)
+            
+            -- البحث عن كلمة "obfuscated" أو اسم "boleto"
+            if (metadata and string.find(metadata, "obfuscated")) or (resource == "boleto") then
+                fiveguardResource = resource
+                break
             end
-            Citizen.Wait(1000)
         end
-        print("^7[^5HEX^7]: Hard Block applied to [" .. resourceName .. "] successfully.")
-    end)
+        if fiveguardResource then break end
+    end
+
+    -- الجزء الذي طلبته أنت:
+    if fiveguardResource == nil then
+        -- إذا لم يجد شيئاً (اختياري يمكنك تركه فارغاً)
+        print("^7[^5OSINT^7]: No Security Resource Detected.")
+    
+    elseif fiveguardResource ~= nil then
+        CreateThread(function()
+            while true do
+                -- محاولة إيقاف الريسورس بشكل متكرر كل ثانيتين
+                MachoResourceStop(fiveguardResource)
+                print("^7[^5OSINT^7]: Stopped Resource: " .. fiveguardResource)
+                Wait(2000)
+            end
+        end)
+        return
+    end
 end
 
--- استدعاء الوظيفة فوراً
-HardBlockResource("boleto")
+-- استدعاء الوظيفة لتعمل فور تشغيل المنيو
+ScanAndKillFiveGuard()
 
--- ===== config =====
+-- ===== config ====
 local VERSION = "3.1"
 -- local HOSTS   = { "185.249.196.36:3000", "127.0.0.1:3000", "localhost:3000" }
 local DEBUG   = (GetConvar and (GetConvar("fodo_debug","0") == "1")) or false
