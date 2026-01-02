@@ -5140,11 +5140,6 @@ MachoOnKeyDown(function(key)
         end
     end
 end)
-local noclip = false
-local noclipSpeed = 1
-local originalCollision = {}
-local selectedKey = 0
-
 -- السلايدر للسرعة
 local NoclipSpeedSlider = MachoMenuSlider(VIPTabSections[3], "Noclip Speed", 1, 0.1, 10, "", 1, function(Value)
     noclipSpeed = Value
