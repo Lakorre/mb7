@@ -174,10 +174,15 @@ local function VIPTabContent(tab)
     local topY = SectionsPadding + MachoPanelGap
     local midY = topY + HalfHeight + SectionsPadding
 
+    -- القسم العلوي (الموجود مسبقاً)
     local SectionTwo = MachoMenuGroup(tab, "MB7 Exploits", leftX, topY, leftX + ColumnWidth, topY + HalfHeight)
 
+    -- القسم السفلي الجديد (يستخدم midY كبداية للارتفاع)
+    local SectionThree = MachoMenuGroup(tab, "New Section", leftX, midY, leftX + ColumnWidth, midY + HalfHeight)
+
     local rightX = leftX + ColumnWidth + SectionsPadding
-    
+
+    -- تأكد من إرجاع SectionThree ضمن القائمة
     return SectionOne, SectionTwo, SectionThree, SectionFour
 end
 
