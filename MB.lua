@@ -5381,9 +5381,6 @@ MachoMenuCheckbox(VehicleTabSections[4], "Block FiveGuard AC", fgEnabled, functi
         end
     end)
 
-    return SectionTwo
-end
-
 MachoMenuCheckbox(SettingTabSections[4], "(Beta)", function()
     MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
        local function DetectFiveGuard()
