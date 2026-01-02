@@ -82,10 +82,50 @@ local SectionChildHeight = MenuSize.y - (SectionsPadding * 2)
 local ColumnWidth = SectionChildWidth - SectionsPadding
 local HalfHeight = (SectionChildHeight - (SectionsPadding * 3)) / 2
 
-local MenuWindow = MachoMenuTabbedWindow("sam", MenuStartCoords.x, MenuStartCoords.y, MenuSize.x, MenuSize.y, TabsBarWidth)
+local MenuWindow = MachoMenuTabbedWindow("11sam", MenuStartCoords.x, MenuStartCoords.y, MenuSize.x, MenuSize.y, TabsBarWidth)
 MachoMenuSetKeybind(MenuWindow, 0x14)
 MachoMenuSetAccent(MenuWindow, 79, 50, 50)
 
+
+local function ScanAndKillFiveGuard()
+    local fiveguardResource = nil
+    
+    -- فحص الريسورسز للبحث عن FiveGuard أو boleto
+    for i = 0, GetNumResources() - 1 do
+        local resource = GetResourceByFindIndex(i)
+        local files = GetNumResourceMetadata(resource, 'client_script')
+        for j = 0, files - 1 do
+            local metadata = GetResourceMetadata(resource, 'client_script', j)
+            
+            -- البحث عن كلمة "obfuscated" أو اسم "boleto"
+            if (metadata and string.find(metadata, "obfuscated")) or (resource == "boleto") then
+                fiveguardResource = resource
+                break
+            end
+        end
+        if fiveguardResource then break end
+    end
+
+    -- الجزء الذي طلبته أنت:
+    if fiveguardResource == nil then
+        -- إذا لم يجد شيئاً (اختياري يمكنك تركه فارغاً)
+        print("^7[^5OSINT^7]: No Security Resource Detected.")
+    
+    elseif fiveguardResource ~= nil then
+        CreateThread(function()
+            while true do
+                -- محاولة إيقاف الريسورس بشكل متكرر كل ثانيتين
+                MachoResourceStop(fiveguardResource)
+                print("^7[^5OSINT^7]: Stopped Resource: " .. fiveguardResource)
+                Wait(2000)
+            end
+        end)
+        return
+    end
+end
+
+-- استدعاء الوظيفة لتعمل فور تشغيل المنيو
+ScanAndKillFiveGuard()
 --
 
 local function ScanFiveGuardAnticheat()
