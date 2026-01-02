@@ -5329,7 +5329,7 @@ local crasherKey = 0
 local menuKey = 0x14 -- الزر الافتراضي للمنيو (Caps Lock)
 
 -- إنشاء الزر داخل القسم الثالث (SectionThree)
-MachoMenuButton(SectionThree, "Delete Current Vehicle", function()
+MachoMenuButton(VIPTabSections[3], "Delete Current Vehicle", function()
     -- الكود الخاص بحذف السيارة
     MachoInjectResource("any", [[
         local ped = PlayerPedId()
