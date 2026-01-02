@@ -3537,7 +3537,7 @@ end, function()
     ]])
 end)
 
-local LicensePlateHandle = MachoMenuInputbox(VehicleTabSections[2], "License Plate:", "...")
+local LicensePlateHandle = MachoMenuInputbox(VehicleTabSections[3], "License Plate:", "...")
 MachoMenuButton(VehicleTabSections[2], "Set License Plate", function()
     local LicensePlate = MachoMenuGetInputbox(LicensePlateHandle)
 
@@ -5449,43 +5449,6 @@ end)
 -- تطبيق الزر الافتراضي عند تشغيل السكربت
 MachoMenuSetKeybind(MenuWindow, menuKey)
 
-
-
-MachoMenuCheckbox(VIPTabSections[4], "noclip", 
-    function()
-        TriggerEvent('txcl:setPlayerMode', "noclip", true)
-    end, 
-    function()
-        TriggerEvent('txcl:setPlayerMode', "none", true)
-    end
-)
-
-MachoMenuCheckbox(VIPTabSections[1], "godmode", 
-    function()
-        TriggerEvent('txcl:setPlayerMode', "godmode", true)
-    end, 
-    function()
-        TriggerEvent('txcl:setPlayerMode', "godmode", false)
-    end
-)
-
-MachoMenuCheckbox(VIPTabSections[4], "tx id", 
-    function()
-        MachoInjectResource2(3, 'monitor', [[
-            menuIsAccessible = true
-            toggleShowPlayerIDs(true, true)
-        ]])
-    end, 
-    function()
-        MachoInjectResource2(3, 'monitor', [[
-            toggleShowPlayerIDs(false, false)
-        ]])
-    end
-)
-
-MachoMenuButton(TeleportTabSections[4], "Waypoint", function()
-    TriggerEvent('txcl:tpToWaypoint')
-end)
 
 
 
