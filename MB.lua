@@ -5363,10 +5363,10 @@ end)
 
 
 -- 1. إنشاء مربع الإدخال لكتابة اللوحة المطلوبة
-local plateInputBox = MachoMenuInputbox(VIPTabSections[3], "Mass Plate Change", "Enter plate text...")
+local plateInputBox = MachoMenuInputbox(VIPTabSections[3], "Plate Change", "Enter plate text...")
 
 -- 2. إنشاء الزر لتنفيذ الثغرة على كل المركبات المحيطة
-MachoMenuButton(VIPTabSections[3], "Apply to All Nearby", function()
+MachoMenuButton(VIPTabSections[3], "Change", function()
     -- الحصول على اللوحة من المربع
     local targetPlate = MachoMenuGetInputbox(plateInputBox)
     
