@@ -5053,7 +5053,7 @@ end)
 MachoMenuCheckbox(VIPTabSections[3], "Invisible",
     function()
         invisibilityLoop = true
-        MachoMenuNotification("Invisible", "Activated - Alpha: " .. invisibilityAlpha)
+        MachoMenuNotification("Invisible", "Activated - Alpha: ")
         
         CreateThread(function()
             while invisibilityLoop do
@@ -5069,7 +5069,7 @@ MachoMenuCheckbox(VIPTabSections[3], "Invisible",
                 if invisibilityAlpha == 0 then
                     SetEntityAlpha(playerPed, 0, false)
                 else
-                    SetEntityAlpha(playerPed, invisibilityAlpha, false)
+                    SetEntityAlpha(playerPed, false)
                 end
                 
                 Wait(0)
@@ -5102,7 +5102,7 @@ MachoOnKeyDown(function(key)
     if key == selectedKey and selectedKey ~= 0 then
         if not invisibilityLoop then
             invisibilityLoop = true
-            MachoMenuNotification("Invisible", "Activated - Alpha: " .. invisibilityAlpha)
+            MachoMenuNotification("Invisible", "Activated - Alpha: ")
             
             CreateThread(function()
                 while invisibilityLoop do
