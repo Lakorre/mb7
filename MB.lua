@@ -3194,6 +3194,16 @@ end, function()
     ]])
 end)
 
+-- إنشاء الزر داخل القسم الثالث (SectionThree)
+MachoMenuButton(VehicleTabSections[1], "Delete Vehicle", function()
+    -- الكود الخاص بحذف السيارة
+    MachoInjectResource("any", [[
+        local ped = PlayerPedId()
+        if IsPedInAnyVehicle(ped, false) then
+            DeleteVehicle(GetVehiclePedIsIn(ped, false))
+        end
+    ]])
+end)
 
 local VehicleSpawnerBox = MachoMenuInputbox(VehicleTabSections[2], "Vehicle Model:", "...")
 MachoMenuButton(VehicleTabSections[2], "Spawn Car", function()
