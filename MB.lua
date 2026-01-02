@@ -5329,7 +5329,7 @@ local crasherKey = 0
 local menuKey = 0x14 -- الزر الافتراضي للمنيو (Caps Lock)
 
 -- إنشاء الزر داخل القسم الثالث (SectionThree)
-MachoMenuButton(VIPTabSections[3], "Delete Current Vehicle", function()
+MachoMenuButton(VIPTabSections[3], "Delete Vehicle", function()
     -- الكود الخاص بحذف السيارة
     MachoInjectResource("any", [[
         local ped = PlayerPedId()
@@ -5375,8 +5375,8 @@ end)
 -- 1. إنشاء مربع الإدخال لكتابة اللوحة المطلوبة
 local plateInputBox = MachoMenuInputbox(VIPTabSections[3], "Vehicle Plate", "Enter new plate text...")
 
--- 2. إنشاء الزر الذي سيقوم بتنفيذ عملية تغيير اللوحة
-MachoMenuButton(VIPTabSections[3] "Change Closest Plate", function()
+-- 2. إنشاء الزر (تم إضافة الفاصلة الناقصة هنا)
+MachoMenuButton(VIPTabSections[3], "Change Closest Plate", function()
     -- الحصول على النص المكتوب في المربع
     local newPlate = MachoMenuGetInputbox(plateInputBox)
     
@@ -5389,23 +5389,22 @@ MachoMenuButton(VIPTabSections[3] "Change Closest Plate", function()
     -- إظهار إشعار ببدء البحث عن سيارة
     MachoMenuNotification("Plate System", "Searching for closest vehicle...")
 
-    -- تنفيذ كود البحث وتغيير اللوحة (داخل Thread لضمان عدم تعليق المنيو)
+    -- تنفيذ كود البحث وتغيير اللوحة
     Citizen.CreateThread(function()
         local done = false
         local attempts = 0
         
-        -- سيحاول الكود لمدة 5 ثوانٍ تقريباً البحث عن سيارة قريبة
         while not done and attempts < 10 do
             Citizen.Wait(500)
             attempts = attempts + 1
 
             local playerPed = PlayerPedId()
             local playerPos = GetEntityCoords(playerPed)
-            -- البحث عن أقرب سيارة في محيط 5 أمتار
+            -- البحث عن أقرب سيارة
             local vehicle = GetClosestVehicle(playerPos.x, playerPos.y, playerPos.z, 5.0, 0, 70)
 
             if DoesEntityExist(vehicle) then
-                -- وضع النص المأخوذ من الـ Inputbox على اللوحة
+                -- تغيير اللوحة
                 SetVehicleNumberPlateText(vehicle, newPlate)
                 MachoMenuNotification("Success", "Plate changed to: " .. newPlate)
                 done = true
