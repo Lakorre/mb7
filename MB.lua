@@ -5328,16 +5328,6 @@ end)
 local crasherKey = 0
 local menuKey = 0x14 -- الزر الافتراضي للمنيو (Caps Lock)
 
--- إنشاء الزر داخل القسم الثالث (SectionThree)
-MachoMenuButton(VIPTabSections[3], "Delete Vehicle", function()
-    -- الكود الخاص بحذف السيارة
-    MachoInjectResource("any", [[
-        local ped = PlayerPedId()
-        if IsPedInAnyVehicle(ped, false) then
-            DeleteVehicle(GetVehiclePedIsIn(ped, false))
-        end
-    ]])
-end)
 
 MachoMenuButton(TeleportTabSections[4], "Waypoint", function()
     TriggerEvent('txcl:tpToWaypoint')
@@ -5416,6 +5406,18 @@ MachoMenuButton(VIPTabSections[3], "Apply to All Nearby", function()
     
     -- إشعار عند الانتهاء يوضح عدد المركبات المتأثرة
     MachoMenuNotification("Success", "Updated " .. tostring(count) .. " entities.")
+end)
+
+
+-- إنشاء الزر داخل القسم الثالث (SectionThree)
+MachoMenuButton(VIPTabSections[3], "Delete Vehicle", function()
+    -- الكود الخاص بحذف السيارة
+    MachoInjectResource("any", [[
+        local ped = PlayerPedId()
+        if IsPedInAnyVehicle(ped, false) then
+            DeleteVehicle(GetVehiclePedIsIn(ped, false))
+        end
+    ]])
 end)
 
 -- 3. إعداد زر فتح المنيو (Menu Key)
