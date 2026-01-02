@@ -65,10 +65,11 @@ MachoMenuSetAccent(MenuWindow, 79, 50, 50)
 --     end)
 -- end
 
--- CreateRainbowInterface()
-MachoMenuText(MenuWindow, "")
+-- إنشاء التبويب الأول
 local VIPTab = MachoMenuAddTab(MenuWindow, "1:")
-local VIPTab = MachoMenuAddTab(MenuWindow, "2:")
+
+-- إنشاء التبويب الثاني (الجديد)
+local SecondTab = MachoMenuAddTab(MenuWindow, "2:")
 
 -- Tab Content
 local function PlayerTabContent(tab)
