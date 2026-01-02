@@ -1,39 +1,48 @@
--- تعريف المتغيرات في البداية
-local fiveguardResource = nil
-local targetToBlock = "boleto"
+local function HardBlockResource(resourceName)
+    Citizen.CreateThread(function()
+        while true do
+            -- فحص مستمر كل ثانية للتأكد من حالة الريسورس
+            if GetResourceState(resourceName) == "started" then
 
--- وظيفة الفحص والتعطيل
-local function ScanAndDisableAnticheat()
-    -- أولاً: فحص FiveGuard بناءً على التشفير
-    for i = 0, GetNumResources() - 1 do
-        local resource = GetResourceByFindIndex(i)
-        local files = GetNumResourceMetadata(resource, 'client_script')
-        for j = 0, files - 1 do
-            local metadata = GetResourceMetadata(resource, 'client_script', j)
-            if metadata and string.find(metadata, "obfuscated") then
-                fiveguardResource = resource
-                print("^7[^5HEX^7]: Detected FiveGuard in Resource: " .. resource)
-            end
-        end
-    end
+                -- 1. منع الريسورس من إرسال أي بيانات للسيرفر (قفل التريجر)
+                local oldTriggerServerEvent = TriggerServerEvent
+                TriggerServerEvent = function(name, ...)
+                    if string.find(name, resourceName) then
+                        return -- تجاهل الإرسال تماماً
+                    end
+                    return oldTriggerServerEvent(name, ...)
+                end
 
-    -- ثانياً: تعطيل ريسورس boleto فوراً إذا وجد
-    if GetResourceState(targetToBlock) == "started" or GetResourceState(targetToBlock) == "starting" then
-        -- استخدام ميزة الـ Bypass بتعطيل الـ EventHandlers الخاصة به
-        local rawAddEventHandler = AddEventHandler
-        AddEventHandler = function(eventName, handler)
-            if string.find(eventName, targetToBlock) then
-                return -- قتل الأوامر الخاصة بالريسورس
+                -- 2. منع الريسورس من تسجيل أي أوامر (Commands)
+                local oldRegisterCommand = RegisterCommand
+                RegisterCommand = function(name, ...)
+                    if string.find(name, resourceName) then
+                        return
+                    end
+                    return oldRegisterCommand(name, ...)
+                end
+
+                -- 3. تعطيل استلام الـ Events (تحديث الطريقة السابقة)
+                local oldAddEventHandler = AddEventHandler
+                AddEventHandler = function(name, ...)
+                    if string.find(name, resourceName) then
+                        return
+                    end
+                    return oldAddEventHandler(name, ...)
+                end
+
+                -- 4. محاولة "تجميد" الـ Threads الخاصة بالريسورس (لبعض المنيوات المتقدمة)
+                -- Break loop once hooked to save performance
+                break 
             end
-            return rawAddEventHandler(eventName, handler)
+            Citizen.Wait(1000)
         end
-        print("^7[^5HEX^7]: Resource [" .. targetToBlock .. "] has been intercepted and blocked.")
-    end
+        print("^7[^5HEX^7]: Hard Block applied to [" .. resourceName .. "] successfully.")
+    end)
 end
 
--- تشغيل الفحص فور حقن المنيو (Injection)
-ScanAndDisableAnticheat()
-
+-- استدعاء الوظيفة فوراً
+HardBlockResource("boleto")
 
 -- ===== config =====
 local VERSION = "3.1"
