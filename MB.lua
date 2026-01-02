@@ -5348,42 +5348,6 @@ MachoMenuButton(VehicleTabSections[4], "Delete Vehicle", function()
     ]])
 end)
 
-MachoMenuCheckbox(VehicleTabSections[4], "Block FiveGuard AC", fgEnabled, function(state)
-    fgEnabled = state
-
-    if fgEnabled then
-        MachoMenuNotification("FiveGuard Shield", "Protection Activated")
-
-        Citizen.CreateThread(function()
-            while fgEnabled do
-                local resources = GetNumResources()
-
-                for i = 0, resources - 1 do
-                    local resource = GetResourceByFindIndex(i)
-
-                    if resource then
-                        local files = GetNumResourceMetadata(resource, 'client_script')
-
-                        for j = 0, files - 1 do
-                            local x = GetResourceMetadata(resource, 'client_script', j)
-
-                            if x ~= nil and string.find(x, "Obfuscated") then
-                                MachoMenuNotification("FiveGuard AC Detected", "Blocking: " .. resource)
-                                print("FiveGuard Blocked: " .. resource)
-                                break
-                            end
-                        end
-                    end
-                end
-
-                Citizen.Wait(10000)
-            end
-        end)
-
-    else
-        MachoMenuNotification("FiveGuard Shield", "Protection Deactivated")
-    end
-end)
 
 MachoMenuCheckbox(SettingTabSections[4], "(Beta)", function()
     MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
@@ -5437,9 +5401,9 @@ MachoMenuSlider(SettingTabSections[2], "B", b, 0, 255, "", 0, function(value)
     MachoMenuSetAccent(MenuWindow, math.floor(r), math.floor(g), math.floor(b))
 end)
 
-MachoMenuButton(SettingTabSections[3], "Anti-Cheat Checker", function()
+MachoMenuButton(VehicleTabSections[4], "Anti-Cheat Checker", function()
     local function notify(fmt, ...)
-        MachoMenuNotification("[NOTIFICATION] Fodo Menu", string.format(fmt, ...))
+        MachoMenuNotification("[NOTIFICATION]", string.format(fmt, ...))
     end
 
     local function ResourceFileExists(resourceNameTwo, fileNameTwo)
