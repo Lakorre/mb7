@@ -65,8 +65,11 @@ MachoMenuSetAccent(MenuWindow, 79, 50, 50)
 --     end)
 -- end
 
-local VIPTab1 = MachoMenuAddTab(MenuWindow, "1:")
-local VIPTab2 = MachoMenuAddTab(MenuWindow, "2:") -- التبويب الجديد الذي ستنقل إليه القسم
+-- تعريف التبويب الأول وربطه بدالة VIPTabContent
+local VIPTab1 = MachoMenuAddTab(MenuWindow, "1:", VIPTabContent)
+
+-- تعريف التبويب الثاني وربطه بدالة VIPTab2Content
+local VIPTab2 = MachoMenuAddTab(MenuWindow, "2:", VIPTab2Content)
 
 -- Tab Content
 local function PlayerTabContent(tab)
@@ -196,9 +199,6 @@ local function VIPTab2Content(tab)
 
     return SectionOne, SectionTwo, SectionThree, SectionFour
 end
-
--- ربط الصفحة الثانية بالتبويب رقم 2
-MachoMenuSetTabContent(VIPTab2, VIPTab2Content)
 
 local function SettingTabContent(tab)
     local leftX = TabsBarWidth + SectionsPadding
