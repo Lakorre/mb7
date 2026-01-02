@@ -3256,24 +3256,6 @@ MachoMenuButton(VehicleTabSections[1], "Repair Vehicle", function()
     ]])
 end)
 
-MachoMenuCheckbox(VehicleTabSections[1], "Fast Collect Mode ( RISK )", function(checked)
-    if checked then
-        -- رفع سرعة اللعبة (بين 2.0 و 3.0) لجعل التحصيل أسرع
-        SetTimeScale(2.5) 
-        
-        -- تثبيت اللاعب مكانه لتجنب كشف السرعة (Speed Hack Anticheat)
-        FreezeEntityPosition(PlayerPedId(), true)
-        
-        MachoMenuNotification("Fast Collect", "Activated - Stand Still!")
-    else
-        -- إعادة كل شيء للوضع الطبيعي
-        SetTimeScale(1.0)
-        FreezeEntityPosition(PlayerPedId(), false)
-        
-        MachoMenuNotification("Fast Collect", "Disabled")
-    end
-end)
-
 local VehicleSpawnerBox = MachoMenuInputbox(VehicleTabSections[2], "Vehicle Model:", "Enter car name...")
 MachoMenuButton(VehicleTabSections[2], "Spawn Car", function()
     local VehicleModel = MachoMenuGetInputbox(VehicleSpawnerBox)
