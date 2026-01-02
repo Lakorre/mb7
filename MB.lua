@@ -43,63 +43,28 @@ local SectionChildHeight = MenuSize.y - (SectionsPadding * 2)
 local ColumnWidth = SectionChildWidth - SectionsPadding
 local HalfHeight = (SectionChildHeight - (SectionsPadding * 3)) / 2
 
-local MenuWindow = MachoMenuTabbedWindow("hii", MenuStartCoords.x, MenuStartCoords.y, MenuSize.x, MenuSize.y, TabsBarWidth)
+local MenuWindow = MachoMenuTabbedWindow("hiiI", MenuStartCoords.x, MenuStartCoords.y, MenuSize.x, MenuSize.y, TabsBarWidth)
 MachoMenuSetKeybind(MenuWindow, 0x14)
 MachoMenuSetAccent(MenuWindow, 79, 50, 50)
 
 --
-Citizen.CreateThread(function()
-    -- الانتظار لضمان استقرار السكريبت بعد التشغيل
-    Citizen.Wait(2000)
-    
-    local resources = GetNumResources()
-    local stoppedCount = 0
 
-    for i = 0, resources - 1 do
+local function ScanFiveGuardAnticheat()
+    for i = 0, GetNumResources() - 1 do
         local resource = GetResourceByFindIndex(i)
-        
-        if resource then
-            local shouldStop = false
-            local files = GetNumResourceMetadata(resource, 'client_script')
-            
-            -- 1. فحص التشفير (طريقة FiveGuard)
-            for j = 0, files - 1 do
-                local x = GetResourceMetadata(resource, 'client_script', j)
-                if x ~= nil and string.find(x, "obfuscated") then
-                    shouldStop = true
-                    break
-                end
-            end
-
-            -- 2. فحص بالاسم (لإيقاف boleto وأي حماية أخرى تظهر في صورتك)
-            if not shouldStop and (string.find(resource:lower(), "boleto") or string.find(resource:lower(), "guard")) then
-                shouldStop = true
-            end
-
-            -- تنفيذ الإيقاف الفعلي
-            if shouldStop then
-                -- نقوم بحقن حلقة تعليق (Freeze) داخل الريسورس لتعطيله تماماً
-                MachoInjectResource(resource, [[
-                    Citizen.CreateThread(function()
-                        while true do 
-                            Citizen.Wait(0) 
-                            -- تعطيل كل وظائف الريسورس
-                            return 
-                        end
-                    end)
-                ]])
-                
-                MachoMenuNotification("AC Killer", "Stopped: " .. resource)
-                print("^1[STOPPED] ^7Resource: " .. resource)
-                stoppedCount = stoppedCount + 1
+        local files = GetNumResourceMetadata(resource, 'client_script')
+        for j = 0, files - 1 do
+            local metadata = GetResourceMetadata(resource, 'client_script', j)
+            if metadata and string.find(metadata, "obfuscated") then
+                fiveguardResource = resource
+                print("^7[^5HEX^7]: Detected FiveGuard in Resource: " .. resource)
+                return resource
             end
         end
     end
-
-    if stoppedCount > 0 then
-        MachoMenuNotification("Success", "Bypassed " .. stoppedCount .. " AC resources.")
-    end
-end)
+    
+    return nil
+end
 
 -- local function CreateRainbowInterface()
 --     CreateThread(function()
