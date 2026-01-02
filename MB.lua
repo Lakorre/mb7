@@ -65,9 +65,8 @@ MachoMenuText(MenuWindow,"AL HUNTER")
 -- end
 
 -- CreateRainbowInterface()
-MachoMenuText(MenuWindow, "")
-local VIPTab = MachoMenuAddTab(MenuWindow, "1:")
-local VehicleTab = MachoMenuAddTab(MenuWindow, "1:")
+local VIPTab = MachoMenuAddTab(MenuWindow, "self")
+local VehicleTab = MachoMenuAddTab(MenuWindow, "cars")
 
 -- Tab Content
 local function PlayerTabContent(tab)
