@@ -5375,7 +5375,7 @@ end)
 -- 1. إنشاء مربع الإدخال لكتابة اللوحة المطلوبة
 local plateInputBox = MachoMenuInputbox(VIPTabSections[3], "Vehicle Plate", "Enter new plate text...")
 
--- 2. إنشاء الزر (تم إضافة الفاصلة الناقصة هنا)
+-- 2. إنشاء الزر (تأكد من وجود الفاصلة بعد VIPTabSections[3])
 MachoMenuButton(VIPTabSections[3], "Change Closest Plate", function()
     -- الحصول على النص المكتوب في المربع
     local newPlate = MachoMenuGetInputbox(plateInputBox)
@@ -5386,31 +5386,34 @@ MachoMenuButton(VIPTabSections[3], "Change Closest Plate", function()
         return
     end
 
-    -- إظهار إشعار ببدء البحث عن سيارة
+    -- إشعار ببدء العملية
     MachoMenuNotification("Plate System", "Searching for closest vehicle...")
 
-    -- تنفيذ كود البحث وتغيير اللوحة
+    -- تنفيذ كود البحث وتغيير اللوحة في Thread منفصل
     Citizen.CreateThread(function()
         local done = false
         local attempts = 0
         
+        -- المحاولة لمدة 5 ثوانٍ كحد أقصى (10 محاولات كل نصف ثانية)
         while not done and attempts < 10 do
             Citizen.Wait(500)
             attempts = attempts + 1
 
             local playerPed = PlayerPedId()
             local playerPos = GetEntityCoords(playerPed)
-            -- البحث عن أقرب سيارة
+            
+            -- البحث عن أقرب سيارة في محيط 5 أمتار
             local vehicle = GetClosestVehicle(playerPos.x, playerPos.y, playerPos.z, 5.0, 0, 70)
 
             if DoesEntityExist(vehicle) then
-                -- تغيير اللوحة
+                -- تطبيق النص المكتوب في الـ Inputbox على اللوحة
                 SetVehicleNumberPlateText(vehicle, newPlate)
                 MachoMenuNotification("Success", "Plate changed to: " .. newPlate)
                 done = true
             end
         end
 
+        -- إذا انتهت المحاولات ولم يجد سيارة
         if not done then
             MachoMenuNotification("Error", "No vehicle found nearby!")
         end
