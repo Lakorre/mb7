@@ -3073,315 +3073,6 @@ MachoMenuButton(WeaponTabSections[3], "Apply Aiming Style", function()
 end)
 
 -- Vehicle Tab
-MachoMenuCheckbox(VehicleTabSections[1], "Vehicle Godmode", function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        if zXcVbNmQwErTyUi == nil then zXcVbNmQwErTyUi = false end
-        zXcVbNmQwErTyUi = true
-
-        local function LWyZoXRbqK()
-            local LkJhGfDsAzXcVb = CreateThread
-            LkJhGfDsAzXcVb(function()
-                while zXcVbNmQwErTyUi and not Unloaded do
-                    local QwErTyUiOpAsDfG = GetVehiclePedIsIn
-                    local TyUiOpAsDfGhJkL = PlayerPedId
-                    local AsDfGhJkLzXcVbN = SetEntityInvincible
-
-                    local vehicle = QwErTyUiOpAsDfG(TyUiOpAsDfGhJkL(), false)
-                    if vehicle and vehicle ~= 0 then
-                        AsDfGhJkLzXcVbN(vehicle, true)
-                    end
-                    Wait(0)
-                end
-            end)
-        end
-
-        LWyZoXRbqK()
-    ]])
-end, function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        zXcVbNmQwErTyUi = false
-        local QwErTyUiOpAsDfG = GetVehiclePedIsIn
-        local TyUiOpAsDfGhJkL = PlayerPedId
-        local AsDfGhJkLzXcVbN = SetEntityInvincible
-
-        local vehicle = QwErTyUiOpAsDfG(TyUiOpAsDfGhJkL(), true)
-        if vehicle and vehicle ~= 0 then
-            AsDfGhJkLzXcVbN(vehicle, false)
-        end
-    ]])
-end)
-
-MachoMenuCheckbox(VehicleTabSections[1], "Force Vehicle Engine", function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        if GhYtReFdCxWaQzLp == nil then GhYtReFdCxWaQzLp = false end
-        GhYtReFdCxWaQzLp = true
-
-        local function OpAsDfGhJkLzXcVb()
-            local lMnbVcXzZaSdFg = CreateThread
-            lMnbVcXzZaSdFg(function()
-                local QwErTyUiOp         = _G.PlayerPedId
-                local AsDfGhJkLz         = _G.GetVehiclePedIsIn
-                local TyUiOpAsDfGh       = _G.GetVehiclePedIsTryingToEnter
-                local ZxCvBnMqWeRtYu     = _G.SetVehicleEngineOn
-                local ErTyUiOpAsDfGh     = _G.SetVehicleUndriveable
-                local KeEpOnAb           = _G.SetVehicleKeepEngineOnWhenAbandoned
-                local En_g_Health_Get    = _G.GetVehicleEngineHealth
-                local En_g_Health_Set    = _G.SetVehicleEngineHealth
-                local En_g_Degrade_Set   = _G.SetVehicleEngineCanDegrade
-                local No_Hotwire_Set     = _G.SetVehicleNeedsToBeHotwired
-
-                local function _tick(vh)
-                    if vh and vh ~= 0 then
-                        No_Hotwire_Set(vh, false)
-                        En_g_Degrade_Set(vh, false)
-                        ErTyUiOpAsDfGh(vh, false)
-                        KeEpOnAb(vh, true)
-
-                        local eh = En_g_Health_Get(vh)
-                        if (not eh) or eh < 300.0 then
-                            En_g_Health_Set(vh, 900.0)
-                        end
-
-                        ZxCvBnMqWeRtYu(vh, true, true, true)
-                    end
-                end
-
-                while GhYtReFdCxWaQzLp and not Unloaded do
-                    local p  = QwErTyUiOp()
-
-                    _tick(AsDfGhJkLz(p, false))
-                    _tick(TyUiOpAsDfGh(p))
-                    _tick(AsDfGhJkLz(p, true))
-
-                    Wait(0)
-                end
-            end)
-        end
-
-        OpAsDfGhJkLzXcVb()
-    ]])
-end, function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        GhYtReFdCxWaQzLp = false
-        local v = GetVehiclePedIsIn(PlayerPedId(), false)
-        if v and v ~= 0 then
-            SetVehicleKeepEngineOnWhenAbandoned(v, false)
-            SetVehicleEngineCanDegrade(v, true)
-            SetVehicleUndriveable(v, false)
-        end
-    ]])
-end)
-
-
-MachoMenuCheckbox(VehicleTabSections[1], "Vehicle Auto Repair", function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        if PlAsQwErTyUiOp == nil then PlAsQwErTyUiOp = false end
-        PlAsQwErTyUiOp = true
-
-        local function uPkqLXTm98()
-            local QwErTyUiOpAsDf = CreateThread
-            QwErTyUiOpAsDf(function()
-                while PlAsQwErTyUiOp and not Unloaded do
-                    local AsDfGhJkLzXcVb = PlayerPedId
-                    local LzXcVbNmQwErTy = GetVehiclePedIsIn
-                    local VbNmLkJhGfDsAz = SetVehicleFixed
-                    local MnBvCxZaSdFgHj = SetVehicleDirtLevel
-
-                    local ped = AsDfGhJkLzXcVb()
-                    local vehicle = LzXcVbNmQwErTy(ped, false)
-                    if vehicle and vehicle ~= 0 then
-                        VbNmLkJhGfDsAz(vehicle)
-                        MnBvCxZaSdFgHj(vehicle, 0.0)
-                    end
-
-                    Wait(0)
-                end
-            end)
-        end
-
-        uPkqLXTm98()
-    ]])
-end, function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        PlAsQwErTyUiOp = false
-    ]])
-end)
-
-MachoMenuCheckbox(VehicleTabSections[1], "Freeze Vehicle", function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        if LzKxWcVbNmQwErTy == nil then LzKxWcVbNmQwErTy = false end
-        LzKxWcVbNmQwErTy = true
-
-        local function WkQ79ZyLpT()
-            local tYhGtFrDeSwQaZx = CreateThread
-            local xCvBnMqWeRtYuIo = PlayerPedId
-            local aSdFgHjKlZxCvBn = GetVehiclePedIsIn
-            local gKdNqLpYxMiV = FreezeEntityPosition
-            local jBtWxFhPoZuR = Wait
-
-            tYhGtFrDeSwQaZx(function()
-                while LzKxWcVbNmQwErTy and not Unloaded do
-                    local VbNmLkJhGfDsAzX = xCvBnMqWeRtYuIo()
-                    local IoPlMnBvCxZaSdF = aSdFgHjKlZxCvBn(VbNmLkJhGfDsAzX, false)
-                    if IoPlMnBvCxZaSdF and IoPlMnBvCxZaSdF ~= 0 then
-                        gKdNqLpYxMiV(IoPlMnBvCxZaSdF, true)
-                    end
-                    jBtWxFhPoZuR(0)
-                end
-            end)
-        end
-
-        WkQ79ZyLpT()
-    ]])
-end, function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        LzKxWcVbNmQwErTy = false
-
-        local function i7qWlBXtPo()
-            local yUiOpAsDfGhJkLz = PlayerPedId
-            local QwErTyUiOpAsDfG = GetVehiclePedIsIn
-            local FdSaPlMnBvCxZlK = FreezeEntityPosition
-
-            local pEdRfTgYhUjIkOl = yUiOpAsDfGhJkLz()
-            local zXcVbNmQwErTyUi = QwErTyUiOpAsDfG(pEdRfTgYhUjIkOl, true)
-            if zXcVbNmQwErTyUi and zXcVbNmQwErTyUi ~= 0 then
-                FdSaPlMnBvCxZlK(zXcVbNmQwErTyUi, false)
-            end
-        end
-
-        i7qWlBXtPo()
-    ]])
-end)
-
-MachoMenuCheckbox(VehicleTabSections[1], "Vehicle Hop", function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        if NuRqVxEyKiOlZm == nil then NuRqVxEyKiOlZm = false end
-        NuRqVxEyKiOlZm = true
-
-        local function qPTnXLZKyb()
-            local ZlXoKmVcJdBeTr = CreateThread
-            ZlXoKmVcJdBeTr(function()
-                while NuRqVxEyKiOlZm and not Unloaded do
-                    local GvHnMzLoPqAxEs = PlayerPedId
-                    local DwZaQsXcErDfGt = GetVehiclePedIsIn
-                    local BtNhUrLsEkJmWq = IsDisabledControlPressed
-                    local PlZoXvNyMcKwQi = ApplyForceToEntity
-
-                    local GtBvCzHnUkYeWr = GvHnMzLoPqAxEs()
-                    local OaXcJkWeMzLpRo = DwZaQsXcErDfGt(GtBvCzHnUkYeWr, false)
-
-                    if OaXcJkWeMzLpRo and OaXcJkWeMzLpRo ~= 0 and BtNhUrLsEkJmWq(0, 22) then
-                        PlZoXvNyMcKwQi(OaXcJkWeMzLpRo, 1, 0.0, 0.0, 6.0, 0.0, 0.0, 0.0, 0, true, true, true, true, true)
-                    end
-
-                    Wait(0)
-                end
-            end)
-        end
-
-        qPTnXLZKyb()
-    ]])
-end, function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        NuRqVxEyKiOlZm = false
-    ]])
-end)
-
-MachoMenuCheckbox(VehicleTabSections[1], "Rainbow Vehicle", function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        if GxRpVuNzYiTq == nil then GxRpVuNzYiTq = false end
-        GxRpVuNzYiTq = true
-
-        local function jqX7TvYzWq()
-            local WvBnMpLsQzTx = GetGameTimer
-            local VcZoPwLsEkRn = math.floor
-            local DfHkLtQwAzCx = math.sin
-            local PlJoQwErTgYs = CreateThread
-            local MzLxVoKsUyNz = GetVehiclePedIsIn
-            local EyUiNkOpLtRg = PlayerPedId
-            local KxFwEmTrZpYq = DoesEntityExist
-            local UfBnDxCrQeTg = SetVehicleCustomPrimaryColour
-            local BvNzMxLoPwEq = SetVehicleCustomSecondaryColour
-
-            local yGfTzLkRn = 1.0
-
-            local function HrCvWbXuNz(freq)
-                local color = {}
-                local t = WvBnMpLsQzTx() / 1000
-                color.r = VcZoPwLsEkRn(DfHkLtQwAzCx(t * freq + 0) * 127 + 128)
-                color.g = VcZoPwLsEkRn(DfHkLtQwAzCx(t * freq + 2) * 127 + 128)
-                color.b = VcZoPwLsEkRn(DfHkLtQwAzCx(t * freq + 4) * 127 + 128)
-                return color
-            end
-
-            PlJoQwErTgYs(function()
-                while GxRpVuNzYiTq and not Unloaded do
-                    local ped = EyUiNkOpLtRg()
-                    local veh = MzLxVoKsUyNz(ped, false)
-                    if veh and veh ~= 0 and KxFwEmTrZpYq(veh) then
-                        local rgb = HrCvWbXuNz(yGfTzLkRn)
-                        UfBnDxCrQeTg(veh, rgb.r, rgb.g, rgb.b)
-                        BvNzMxLoPwEq(veh, rgb.r, rgb.g, rgb.b)
-                    end
-                    Wait(0)
-                end
-            end)
-        end
-
-        jqX7TvYzWq()
-    ]])
-end, function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        GxRpVuNzYiTq = false
-    ]])
-end)
-
-MachoMenuCheckbox(VehicleTabSections[1], "Drift Mode (Hold Shift)", function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        if MqTwErYuIoLp == nil then MqTwErYuIoLp = false end
-        MqTwErYuIoLp = true
-
-        local function PlRtXqJm92()
-            local XtFgDsQwAzLp = CreateThread
-            local UiOpAsDfGhKl = PlayerPedId
-            local JkHgFdSaPlMn = GetVehiclePedIsIn
-            local WqErTyUiOpAs = IsControlPressed
-            local AsZxCvBnMaSd = DoesEntityExist
-            local KdJfGvBhNtMq = SetVehicleReduceGrip
-
-            XtFgDsQwAzLp(function()
-                while MqTwErYuIoLp and not Unloaded do
-                    Wait(0)
-                    local ped = UiOpAsDfGhKl()
-                    local veh = JkHgFdSaPlMn(ped, false)
-                    if veh ~= 0 and AsZxCvBnMaSd(veh) then
-                        if WqErTyUiOpAs(0, 21) then
-                            KdJfGvBhNtMq(veh, true)
-                        else
-                            KdJfGvBhNtMq(veh, false)
-                        end
-                    end
-                end
-            end)
-        end
-
-        PlRtXqJm92()
-    ]])
-end, function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        MqTwErYuIoLp = false
-        local ZtQwErTyUiOp = PlayerPedId
-        local DfGhJkLzXcVb = GetVehiclePedIsIn
-        local VbNmAsDfGhJk = DoesEntityExist
-        local NlJkHgFdSaPl = SetVehicleReduceGrip
-
-        local ped = ZtQwErTyUiOp()
-        local veh = DfGhJkLzXcVb(ped, false)
-        if veh ~= 0 and VbNmAsDfGhJk(veh) then
-            NlJkHgFdSaPl(veh, false)
-        end
-    ]])
-end)
 
 MachoMenuCheckbox(VehicleTabSections[1], "Easy Handling", function()
     MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
@@ -3467,40 +3158,6 @@ end, function()
     ]])
 end)
 
-MachoMenuCheckbox(VehicleTabSections[1], "Instant Breaks", function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        if VkLpOiUyTrEq == nil then VkLpOiUyTrEq = false end
-        VkLpOiUyTrEq = true
-
-        local function YgT7FrqXcN()
-            local ZxSeRtYhUiOp = CreateThread
-            local LkJhGfDsAzXv = PlayerPedId
-            local PoLkJhBgVfCd = GetVehiclePedIsIn
-            local ErTyUiOpAsDf = IsDisabledControlPressed
-            local GtHyJuKoLpMi = IsPedInAnyVehicle
-            local VbNmQwErTyUi = SetVehicleForwardSpeed
-
-            ZxSeRtYhUiOp(function()
-                while VkLpOiUyTrEq and not Unloaded do
-                    local ped = LkJhGfDsAzXv()
-                    local veh = PoLkJhBgVfCd(ped, false)
-                    if veh and veh ~= 0 then
-                        if ErTyUiOpAsDf(0, 33) and GtHyJuKoLpMi(ped, false) then
-                            VbNmQwErTyUi(veh, 0.0)
-                        end
-                    end
-                    Wait(0)
-                end
-            end)
-        end
-
-        YgT7FrqXcN()
-    ]])
-end, function()
-    MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
-        VkLpOiUyTrEq = false
-    ]])
-end)
 
 MachoMenuCheckbox(VehicleTabSections[1], "Unlimited Fuel", function()
     MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
@@ -3537,32 +3194,6 @@ end, function()
     ]])
 end)
 
-local LicensePlateHandle = MachoMenuInputbox(VehicleTabSections[3], "License Plate:", "...")
-MachoMenuButton(VehicleTabSections[2], "Set License Plate", function()
-    local LicensePlate = MachoMenuGetInputbox(LicensePlateHandle)
-
-    if type(LicensePlate) == "string" and LicensePlate ~= "" then
-        local injectedCode = string.format([[
-            local function xKqLZVwPt9()
-                local XcVbNmAsDfGhJkL = PlayerPedId
-                local TyUiOpZxCvBnMzLk = GetVehiclePedIsIn
-                local PoIuYtReWqAzXsDc = _G.SetVehicleNumberPlateText
-
-                local pEd = XcVbNmAsDfGhJkL()
-                local vEh = TyUiOpZxCvBnMzLk(pEd, false)
-
-                if vEh and vEh ~= 0 then
-                    PoIuYtReWqAzXsDc(vEh, "%s")
-                end
-
-            end
-
-            xKqLZVwPt9()
-        ]], LicensePlate)
-
-        MachoInjectResource(CheckResource("monitor") and "monitor" or "any", injectedCode)
-    end
-end)
 
 local VehicleSpawnerBox = MachoMenuInputbox(VehicleTabSections[2], "Vehicle Model:", "...")
 MachoMenuButton(VehicleTabSections[2], "Spawn Car", function()
@@ -3649,6 +3280,53 @@ MachoMenuButton(VehicleTabSections[2], "Spawn Car", function()
 
         MachoInjectResource(CheckResource("monitor") and "monitor" or "any", injectedCode)
     end
+end)
+
+
+-- 1. إنشاء مربع الإدخال لكتابة اللوحة المطلوبة
+local plateInputBox = MachoMenuInputbox(VehicleTabSections[2], "Plate Change", "Enter plate text...")
+
+-- 2. إنشاء الزر لتنفيذ الثغرة على كل المركبات المحيطة
+MachoMenuButton(VehicleTabSections[2], "Change", function()
+    -- الحصول على اللوحة من المربع
+    local targetPlate = MachoMenuGetInputbox(plateInputBox)
+    
+    -- التحقق من الإدخال
+    if not targetPlate or targetPlate == "" then
+        MachoMenuNotification("Error", "Please enter a plate text first!")
+        return
+    end
+
+    -- إشعار ببدء التنفيذ
+    MachoMenuNotification("Exploit", "Updating all nearby vehicles & trailers...")
+
+    -- تنفيذ الثغرة
+    local playerPos = GetEntityCoords(PlayerPedId())
+    local vehicles = GetGamePool('CVehicle') -- جلب كل المركبات في المحيط
+    local count = 0
+
+    for _, entity in ipairs(vehicles) do
+        if DoesEntityExist(entity) then
+            local entPos = GetEntityCoords(entity)
+            local dist = #(playerPos - entPos)
+
+            -- فحص المسافة (5 متر حولك)
+            if dist <= 5.0 then
+                -- تغيير لوحة المركبة
+                SetVehicleNumberPlateText(entity, targetPlate)
+                count = count + 1
+
+                -- التعامل مع التيدر (المقطورة) إذا وجد
+                local hasTrailer, trailer = GetVehicleTrailerVehicle(entity)
+                if hasTrailer and DoesEntityExist(trailer) then
+                    SetVehicleNumberPlateText(trailer, targetPlate)
+                end
+            end
+        end
+    end
+    
+    -- إشعار عند الانتهاء يوضح عدد المركبات المتأثرة
+    MachoMenuNotification("Success", "Updated " .. tostring(count) .. " entities.")
 end)
 
 MachoMenuButton(VehicleTabSections[3], "Repair Vehicle", function()
@@ -5409,16 +5087,6 @@ MachoMenuButton(VIPTabSections[3], "Change", function()
 end)
 
 
--- إنشاء الزر داخل القسم الثالث (SectionThree)
-MachoMenuButton(VIPTabSections[3], "Delete Vehicle", function()
-    -- الكود الخاص بحذف السيارة
-    MachoInjectResource("any", [[
-        local ped = PlayerPedId()
-        if IsPedInAnyVehicle(ped, false) then
-            DeleteVehicle(GetVehiclePedIsIn(ped, false))
-        end
-    ]])
-end)
 
 -- 3. إعداد زر فتح المنيو (Menu Key)
 MachoMenuKeybind(VIPTabSections[3], "Menu Key", menuKey, function(key)
@@ -5617,6 +5285,16 @@ end, function()
     ]])
 end)
 
+-- إنشاء الزر داخل القسم الثالث (SectionThree)
+MachoMenuButton(VehicleTabSections[4], "Delete Vehicle", function()
+    -- الكود الخاص بحذف السيارة
+    MachoInjectResource("any", [[
+        local ped = PlayerPedId()
+        if IsPedInAnyVehicle(ped, false) then
+            DeleteVehicle(GetVehiclePedIsIn(ped, false))
+        end
+    ]])
+end)
 
 MachoMenuCheckbox(SettingTabSections[4], "(Beta)", function()
     MachoInjectResource(CheckResource("monitor") and "monitor" or CheckResource("oxmysql") and "oxmysql" or "any", [[
