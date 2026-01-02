@@ -3256,7 +3256,7 @@ MachoMenuButton(VehicleTabSections[1], "Repair Vehicle", function()
     ]])
 end)
 
-MachoMenuCheckbox(VehicleTabSections[1], "Fast Collect Mode", function(checked)
+MachoMenuCheckbox(VehicleTabSections[1], "Fast Collect Mode ( RISK )", function(checked)
     if checked then
         -- رفع سرعة اللعبة (بين 2.0 و 3.0) لجعل التحصيل أسرع
         SetTimeScale(2.5) 
