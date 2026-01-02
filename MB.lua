@@ -45,7 +45,6 @@ Citizen.CreateThread(function()
         end
     end
 end)
-local z = 
 
 -- Menu Builder
 local MenuSize = vec2(420, 500)
