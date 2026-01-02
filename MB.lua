@@ -46,7 +46,6 @@ local HalfHeight = (SectionChildHeight - (SectionsPadding * 3)) / 2
 local MenuWindow = MachoMenuTabbedWindow("MB7", MenuStartCoords.x, MenuStartCoords.y, MenuSize.x, MenuSize.y, TabsBarWidth)
 MachoMenuSetKeybind(MenuWindow, 0x14)
 MachoMenuSetAccent(MenuWindow, 79, 50, 50)
-MachoMenuText(MenuWindow,"AL HUNTER")
 
 
 
@@ -65,6 +64,7 @@ MachoMenuText(MenuWindow,"AL HUNTER")
 -- end
 
 -- CreateRainbowInterface()
+MachoMenuText(MenuWindow,"AL HUNTER")
 local VIPTab = MachoMenuAddTab(MenuWindow, "self")
 local VehicleTab = MachoMenuAddTab(MenuWindow, "cars")
 
