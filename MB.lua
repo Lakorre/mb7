@@ -5141,7 +5141,7 @@ MachoOnKeyDown(function(key)
     end
 end)
 -- السلايدر للسرعة
-local NoclipSpeedSlider = MachoMenuSlider(VIPTabSections[3], "Noclip Speed", 1, 0.1, 10, "", 1, function(Value)
+local NoclipSpeedSlider = MachoMenuSlider(VIPTabSections[2], "Noclip Speed", 1, 0.1, 10, "", 1, function(Value)
     noclipSpeed = Value
 end)
 
